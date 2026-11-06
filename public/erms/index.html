@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ERMS — catalogue &amp; rights management · Epsilon Records</title>
+<meta name="description" content="ERMS is Epsilon Records' catalogue and rights management system: releases, recordings, credits, ownership and consents in one place.">
+<link rel="canonical" href="https://epsilonrecords.com/erms/">
+<meta name="theme-color" content="#0e0f11">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Epsilon Records">
+<meta property="og:title" content="ERMS — catalogue &amp; rights management">
+<meta property="og:description" content="Epsilon Records' catalogue and rights management system: releases, recordings, credits, ownership and consents in one place.">
+<meta property="og:url" content="https://epsilonrecords.com/erms/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ERMS — catalogue &amp; rights management">
+<meta name="twitter:description" content="Epsilon Records' catalogue and rights management system: releases, recordings, credits, ownership and consents in one place.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"ERMS","applicationCategory":"BusinessApplication","operatingSystem":"Web","url":"https://erms.epsilonrecords.com","description":"Catalogue and rights management for Epsilon Records: releases, recordings, credits, ownership and consents.","publisher":{"@type":"Organization","name":"Epsilon Records"}}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="/">
+      <span class="brand-mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="8" y="8" width="16" height="3.4" fill="currentColor"/><rect x="8" y="14.3" width="12" height="3.4" fill="currentColor"/><rect x="8" y="20.6" width="16" height="3.4" fill="currentColor"/><rect x="8" y="8" width="3.4" height="16" fill="currentColor"/></svg></span>
+      Epsilon Records
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/erms/" aria-current="page">ERMS</a>
+      <a href="/audiokit/">AudioKit</a>
+      <a href="/epsilon-audio/">Epsilon Audio</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+      <a class="btn btn-primary btn-sm" href="https://erms.epsilonrecords.com">Open ERMS</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="wrap hero">
+    <div class="hero-copy">
+      <p class="kicker">ERMS · Epsilon Records Management System</p>
+      <h1>The label's catalogue, in one place.</h1>
+      <p class="lede">ERMS is the system Epsilon Records uses to keep track of its releases, recordings, credits and rights. It turns a decade of records, splits and agreements into a catalogue you can actually search.</p>
+      <div class="actions">
+        <a class="btn btn-primary btn-lg" href="https://erms.epsilonrecords.com">Open ERMS</a>
+      </div>
+    </div>
+    <dl class="hero-aside">
+      <div class="row"><dt>Type</dt><dd>Catalogue &amp; rights</dd></div>
+      <div class="row"><dt>Access</dt><dd>Label &amp; roster</dd></div>
+      <div class="row"><dt>Built on</dt><dd>Supabase + Netlify</dd></div>
+    </dl>
+  </section>
+
+  <section class="wrap section rule" aria-labelledby="erms-features">
+    <div class="section-head">
+      <div>
+        <p class="kicker">What it does</p>
+        <h2 id="erms-features">A record for every record</h2>
+      </div>
+      <p>Everything the label needs to know about what it owns, and who made it.</p>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <span class="num">01</span>
+        <h3>Releases &amp; recordings</h3>
+        <p>Each release with its recordings, artwork and track order, from first EP to the latest.</p>
+      </div>
+      <div class="feature">
+        <span class="num">02</span>
+        <h3>Credits</h3>
+        <p>Writers, performers, producers and remixers, with their roles, kept accurate release after release.</p>
+      </div>
+      <div class="feature">
+        <span class="num">03</span>
+        <h3>Ownership &amp; agreements</h3>
+        <p>Master and publishing ownership, split sheets and agreements, tracked per recording.</p>
+      </div>
+      <div class="feature">
+        <span class="num">04</span>
+        <h3>Consents &amp; analysis</h3>
+        <p>Consent for AI-adjacent processing, and AudioKit analysis results, recorded against each recording.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section" aria-labelledby="erms-look">
+    <div class="section-head">
+      <div>
+        <p class="kicker">A look inside</p>
+        <h2 id="erms-look">Built for the way a label works</h2>
+      </div>
+    </div>
+    <!-- TODO(#31 §3): replace this illustrative panel with a real ERMS screenshot before launch. -->
+    <figure class="panel" aria-label="Illustrative ERMS release record">
+      <figcaption class="panel-bar"><span>ERMS · release record</span><span>illustrative</span></figcaption>
+      <div class="panel-body">
+        <span class="line"><span class="accent">EPS-014</span>  Various Artists — <span class="accent">Nieuwe Groove Vol. 1</span></span>
+        <span class="line">status      released · 2024-11-08</span>
+        <span class="line">recordings  4</span>
+        <span class="line">credits     Nate Houk (A1, A2) · Frank Boland (B1) · Daan de Jong (B2)</span>
+        <span class="line">ownership   masters 100% Epsilon Records · publishing per-track</span>
+        <span class="line">consents    AI processing: granted (3/4) · pending (1)</span>
+        <span class="line">analysis    loudness · tempo · key · fingerprints — via AudioKit</span>
+      </div>
+    </figure>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div>
+        <p class="kicker">Ready when you are</p>
+        <h2>Open the catalogue.</h2>
+      </div>
+      <a class="btn btn-primary" href="https://erms.epsilonrecords.com">Open ERMS</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer">
+    <div class="footer-brand">
+      <strong>Epsilon Records</strong>
+      <span>Amsterdam · independent electronic music and software</span>
+    </div>
+    <nav aria-label="Footer">
+      <a href="/erms/">ERMS</a>
+      <a href="/audiokit/">AudioKit</a>
+      <a href="/epsilon-audio/">Epsilon Audio</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://epsilonrecords.bandcamp.com">Bandcamp</a>
+      <a href="https://instagram.com/epsilonrecords">Instagram</a>
+    </nav>
+    <span class="copyright">© 2015–2026 Epsilon Records</span>
+  </div>
+</footer>
+</body>
+</html>

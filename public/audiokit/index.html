@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AudioKit — audio analysis and processing API · Epsilon Records</title>
+<meta name="description" content="Send AudioKit a file and a job type. It checks the file, does the work and calls your webhook: loudness, tempo, key, fingerprints, genre and mood tags, transcodes and previews, with provenance on every result.">
+<link rel="canonical" href="https://epsilonrecords.com/audiokit/">
+<meta name="theme-color" content="#0e0f11">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Epsilon Records">
+<meta property="og:title" content="AudioKit — audio analysis and processing API">
+<meta property="og:description" content="Send AudioKit a file and a job type. It checks the file, does the work and calls your webhook: loudness, tempo, key, fingerprints, genre and mood tags, transcodes and previews.">
+<meta property="og:url" content="https://epsilonrecords.com/audiokit/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AudioKit — audio analysis and processing API">
+<meta name="twitter:description" content="Audio analysis and processing, one job at a time. Loudness, tempo, key, fingerprints, genre and mood, transcodes and previews, with provenance on every result.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"AudioKit","applicationCategory":"DeveloperApplication","operatingSystem":"Web","url":"https://audiokit.ai","description":"Audio analysis and processing API: send a file and a job, get the result by webhook.","publisher":{"@type":"Organization","name":"Epsilon Records"}}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="/">
+      <span class="brand-mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="8" y="8" width="16" height="3.4" fill="currentColor"/><rect x="8" y="14.3" width="12" height="3.4" fill="currentColor"/><rect x="8" y="20.6" width="16" height="3.4" fill="currentColor"/><rect x="8" y="8" width="3.4" height="16" fill="currentColor"/></svg></span>
+      Epsilon Records
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/erms/">ERMS</a>
+      <a href="/audiokit/" aria-current="page">AudioKit</a>
+      <a href="/epsilon-audio/">Epsilon Audio</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+      <a class="btn btn-primary btn-sm" href="https://erms.epsilonrecords.com">Open ERMS</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="wrap hero">
+    <div class="hero-copy">
+      <p class="kicker">AudioKit · audio analysis &amp; processing API</p>
+      <h1>Audio analysis and processing, one job at a time.</h1>
+      <p class="lede">Send AudioKit a link to a file and the job you want done. It checks the file, does the work and calls your webhook. Originals are never changed, and every result records exactly what produced it.</p>
+      <div class="actions">
+        <a class="btn btn-primary btn-lg" href="https://audiokit.ai">audiokit.ai</a>
+        <a class="btn btn-lg" href="https://audiokit.ai/docs">Read the docs</a>
+      </div>
+    </div>
+    <dl class="hero-aside">
+      <div class="row"><dt>Type</dt><dd>Audio ML API</dd></div>
+      <div class="row"><dt>Delivery</dt><dd>Webhook or poll</dd></div>
+      <div class="row"><dt>Docs</dt><dd>audiokit.ai/docs</dd></div>
+      <div class="row"><dt>Status</dt><dd>Early access</dd></div>
+    </dl>
+  </section>
+
+  <section class="wrap section rule" aria-labelledby="audiokit-features">
+    <div class="section-head">
+      <div>
+        <p class="kicker">Capabilities</p>
+        <h2 id="audiokit-features">One request per job</h2>
+      </div>
+      <p>Operations are described by an OpenAPI contract, so the API, the docs and your client stay in step.</p>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <span class="num">01</span>
+        <h3>Analysis</h3>
+        <p>Loudness, tempo and key, with the numbers a mastering or metadata workflow needs.</p>
+      </div>
+      <div class="feature">
+        <span class="num">02</span>
+        <h3>Identification</h3>
+        <p>Audio fingerprints, plus genre and mood tags for organising a catalogue at scale.</p>
+      </div>
+      <div class="feature">
+        <span class="num">03</span>
+        <h3>Processing</h3>
+        <p>Transcodes and previews written to the upload URLs you provide. Originals are untouched.</p>
+      </div>
+      <div class="feature">
+        <span class="num">04</span>
+        <h3>Provenance</h3>
+        <p>Signed webhooks and a result that carries the input hash, AudioKit version and settings.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section" aria-labelledby="audiokit-start">
+    <div class="split">
+      <div class="split-copy">
+        <p class="kicker">Get started</p>
+        <h2 id="audiokit-start">Read the quickstart</h2>
+        <p>The getting-started guide walks through a first job, the webhook signature and polling. The API reference is generated from the contract.</p>
+        <p><a class="link" href="https://audiokit.ai/docs">audiokit.ai/docs</a></p>
+      </div>
+      <div class="split-copy">
+        <p class="kicker">In the label</p>
+        <h2>AudioKit behind ERMS</h2>
+        <p>ERMS uses AudioKit to analyse the label's recordings, so the catalogue carries loudness, tempo, key and fingerprints alongside its credits and rights.</p>
+        <p><a class="link" href="/erms/">About ERMS</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div>
+        <p class="kicker">Early access</p>
+        <h2>Request an API key.</h2>
+      </div>
+      <a class="btn btn-primary" href="https://audiokit.ai">Go to audiokit.ai</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer">
+    <div class="footer-brand">
+      <strong>Epsilon Records</strong>
+      <span>Amsterdam · independent electronic music and software</span>
+    </div>
+    <nav aria-label="Footer">
+      <a href="/erms/">ERMS</a>
+      <a href="/audiokit/">AudioKit</a>
+      <a href="/epsilon-audio/">Epsilon Audio</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://epsilonrecords.bandcamp.com">Bandcamp</a>
+      <a href="https://instagram.com/epsilonrecords">Instagram</a>
+    </nav>
+    <span class="copyright">© 2015–2026 Epsilon Records</span>
+  </div>
+</footer>
+</body>
+</html>
