@@ -63,6 +63,28 @@
   to = "/contact/"
   status = 301
 
+# Label/collective pages kept as pages (0003): the extension-less old URLs 301 to them.
+
+[[redirects]]
+  from = "/nieuwe-groove-collectief"
+  to = "/nieuwe-groove-collectief/"
+  status = 301
+
+[[redirects]]
+  from = "/diverse-records"
+  to = "/diverse-records/"
+  status = 301
+
+[[redirects]]
+  from = "/collective"
+  to = "/collective/"
+  status = 301
+
+[[redirects]]
+  from = "/partners"
+  to = "/partners/"
+  status = 301
+
 # The shop is gone: /merch and its ~38 product URLs 301 to the external store (0003).
 
 [[redirects]]
@@ -101,8 +123,8 @@
   status = 410
 
 # --- Not implemented on purpose --------------------------------------------
-# - Label/collective pages (/nieuwe-groove-collectief, /diverse-records,
-#   /collective, /partners, /anr-guide): 0003 keeps them as label pages, so they
-#   are content to migrate, not redirects. They 404 until those pages land.
+# - /anr-guide: 0003 keeps label content as pages, but whether an internal A&R
+#   guide should be public is still Nate's call (EPSILON-49). No page, no rule;
+#   it 404s until that is decided.
 # - Analytics: none (0003).
 # - DNS and the Netlify domain attachment: deferred by Nate (0003).

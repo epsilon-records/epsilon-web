@@ -6,6 +6,7 @@
 // - every internal link in public/**/*.html resolves to a file
 // - every page has a title, a meta description and a canonical link (404 excepted)
 // - sitemap.xml lists every indexable page
+// - pages carrying data-placeholder (content not yet migrated) are listed as warnings
 // - every redirect in netlify.toml is well formed, unique, and points at a real
 //   file when its destination is internal
 
@@ -99,6 +100,7 @@ async function main() {
   }
 
   const pages = new Set();
+  const placeholders = [];
   for (const file of html) {
     const rel = relative(pub, file);
     const url = rel.endsWith("index.html") ? "/" + rel.slice(0, -"index.html".length) : "/" + rel;
@@ -106,6 +108,7 @@ async function main() {
 
     const src = await readFile(file, "utf8");
     const is404 = rel === "404.html";
+    if (/data-placeholder/.test(src)) placeholders.push(rel);
     if (!/<title>[^<]+<\/title>/.test(src)) problems.push(`${rel}: no <title>`);
     if (!is404 && !/<meta name="description" content="[^"]+"/.test(src)) {
       problems.push(`${rel}: no meta description`);
@@ -147,6 +150,8 @@ async function main() {
     for (const problem of problems) console.error("  - " + problem);
     process.exit(1);
   }
+  // Placeholders are allowed (content still being migrated) but never silent.
+  for (const rel of placeholders) console.warn(`warning: ${rel} has placeholder content`);
   console.log(`check ok: ${html.length} pages, ${locs.length} sitemap urls`);
 }
 

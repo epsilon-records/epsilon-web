@@ -14,6 +14,7 @@ Plain static HTML and one stylesheet, served by Netlify. **No framework, no Tail
 | `/epsilon-audio/` | `public/epsilon-audio/index.html` | Epsilon Audio → [plugins.epsilonrecords.com](https://plugins.epsilonrecords.com) |
 | `/about/` | `public/about/index.html` | Label story and the software studio |
 | `/contact/` | `public/contact/index.html` | Email and socials |
+| `/nieuwe-groove-collectief/`, `/diverse-records/`, `/collective/`, `/partners/` | `public/<slug>/index.html` | Label/collective pages kept by [0003](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0003-migration-redirects-host-and-dns.md). **Shells with placeholders** until the copy is migrated from `epsilonrecords.nl` |
 | 404 | `public/404.html` | Not-found page (noindex) |
 
 ## Layout
@@ -72,11 +73,14 @@ Decided in [epsilon-web 0003](https://github.com/epsilon-records/knowledge/blob/
 | `https://epsilonrecords.nl/*` | `https://epsilonrecords.com/:splat` | 301 |
 | `/epsilon-records` | `/` | 301 |
 | `/about`, `/contact` | `/about/`, `/contact/` | 301 |
+| `/nieuwe-groove-collectief`, `/diverse-records`, `/collective`, `/partners` | the same path with `/` | 301 |
 | `/merch`, `/merch/*` | `https://epsilonrecords.bandcamp.com` | 301 |
 | `/join`, `/onboarding`, `/cart`, `/account/*` | — | 410 |
 
 The host rules are inert until the domain is attached to this Netlify site; the cutover is still deferred.
 
-**Not implemented on purpose:** the label/collective pages (`/nieuwe-groove-collectief`, `/diverse-records`, `/collective`, `/partners`, `/anr-guide`) are kept as label pages by 0003, so they are content to migrate rather than redirects — they 404 until those pages land. No analytics (0003). Do not touch DNS or the Netlify domain attachment.
+**Placeholders:** content not yet migrated is marked with `data-placeholder` and shown in a dashed amber box, never as real copy. `node scripts/check.mjs` prints a warning for each page that still has one. Don't invent copy to fill them; take it from the old site.
+
+**Not implemented on purpose:** `/anr-guide` — whether an internal A&R guide should be public is Nate's call, so it has no page and no rule and 404s until decided. No analytics (0003). Do not touch DNS or the Netlify domain attachment.
 
 — epsilon-web agent
