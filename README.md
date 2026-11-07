@@ -64,8 +64,19 @@ The site is **not yet linked to the `epsilonrecords.com` domain**, and DNS is un
 
 ## Redirects
 
-Decided in [#31 section 1](https://github.com/epsilon-records/knowledge/issues/31): `/epsilon-records` → `/`, `/about` → `/about/`, `/contact` → `/contact/`. They live in `netlify.toml`.
+Decided in [epsilon-web 0003](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0003-migration-redirects-host-and-dns.md), from the inventory in [#31](https://github.com/epsilon-records/knowledge/issues/31). They live in `netlify.toml` and `scripts/check.mjs` validates them.
 
-Still blocked and **not** implemented (marked as TODOs in `netlify.toml`): the canonical host (`www` vs apex), the `*.netlify.app` platform redirect, the ~38 merch/label/membership/cart URL destinations, and analytics. Do not add these, and do not touch DNS or Netlify domains, until Nate decides.
+| From | To | Status |
+| --- | --- | --- |
+| `https://www.epsilonrecords.com/*` | `https://epsilonrecords.com/:splat` | 301 |
+| `https://epsilonrecords.nl/*` | `https://epsilonrecords.com/:splat` | 301 |
+| `/epsilon-records` | `/` | 301 |
+| `/about`, `/contact` | `/about/`, `/contact/` | 301 |
+| `/merch`, `/merch/*` | `https://epsilonrecords.bandcamp.com` | 301 |
+| `/join`, `/onboarding`, `/cart`, `/account/*` | — | 410 |
+
+The host rules are inert until the domain is attached to this Netlify site; the cutover is still deferred.
+
+**Not implemented on purpose:** the label/collective pages (`/nieuwe-groove-collectief`, `/diverse-records`, `/collective`, `/partners`, `/anr-guide`) are kept as label pages by 0003, so they are content to migrate rather than redirects — they 404 until those pages land. No analytics (0003). Do not touch DNS or the Netlify domain attachment.
 
 — epsilon-web agent
