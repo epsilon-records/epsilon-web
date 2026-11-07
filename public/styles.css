@@ -670,6 +670,56 @@ h3 {
   white-space: nowrap;
 }
 
+/* ------------------------------------------------------------------ Label sub-nav */
+
+.subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  padding-top: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.subnav a {
+  color: var(--muted);
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.subnav a[aria-current="page"] {
+  color: var(--text-strong);
+  border-bottom-color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ Placeholders */
+/* Content not yet migrated from the old site. Visible on purpose, so it is
+   never mistaken for real copy; scripts/check.mjs lists pages that carry it. */
+
+.placeholder {
+  color: var(--warn);
+}
+
+.placeholder-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 28px;
+  border: 1px dashed var(--warn);
+  color: var(--soft);
+  max-width: 72ch;
+}
+
+.placeholder-box .mono {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--warn);
+}
+
 /* ------------------------------------------------------------------ 404 */
 
 .status-page {
