@@ -696,6 +696,49 @@ h3 {
   border-bottom-color: var(--accent);
 }
 
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.65fr);
+  align-items: start;
+  gap: 48px;
+}
+
+.content-grid img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.content-grid figure img + img {
+  margin-top: 24px;
+}
+
+.partner-list,
+.value-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.partner-list li,
+.value-list li {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.quote {
+  margin: 40px 0;
+  font-size: clamp(22px, 3vw, 32px);
+}
+
+.quote span {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+}
+
 /* ------------------------------------------------------------------ Placeholders */
 /* Content not yet migrated from the old site. Visible on purpose, so it is
    never mistaken for real copy; scripts/check.mjs lists pages that carry it. */
@@ -753,6 +796,12 @@ h3 {
   }
 
   .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .content-grid,
+  .partner-list,
+  .value-list {
     grid-template-columns: 1fr;
   }
 
