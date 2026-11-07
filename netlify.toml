@@ -1,9 +1,10 @@
 # epsilon-web is a static site: there is no build step. Netlify publishes public/ as-is.
 # Redirects, headers and the publish directory live here.
 #
-# The redirect map is decided in epsilon-web decision 0003
-# (knowledge/epsilon-web/decisions/0003-migration-redirects-host-and-dns.md) and the
-# URL inventory in knowledge issue #31. Do not add destinations that are not in 0003.
+# The redirect map is decided in epsilon-web decisions 0003 and 0005
+# (knowledge/epsilon-web/decisions/0003-migration-redirects-host-and-dns.md,
+# 0005-include-anr-guide.md) and the URL inventory in knowledge issue #31.
+# Do not add destinations that are not decided there.
 
 [build]
   publish = "public"
@@ -63,7 +64,8 @@
   to = "/contact/"
   status = 301
 
-# Label/collective pages kept as pages (0003): the extension-less old URLs 301 to them.
+# Label/collective pages kept as pages (0003), plus the A&R guide kept as a page
+# (0005): the extension-less old URLs 301 to them.
 
 [[redirects]]
   from = "/nieuwe-groove-collectief"
@@ -83,6 +85,11 @@
 [[redirects]]
   from = "/partners"
   to = "/partners/"
+  status = 301
+
+[[redirects]]
+  from = "/anr-guide"
+  to = "/anr-guide/"
   status = 301
 
 # The shop is gone: /merch and its ~38 product URLs 301 to the external store (0003).
@@ -123,8 +130,5 @@
   status = 410
 
 # --- Not implemented on purpose --------------------------------------------
-# - /anr-guide: 0003 keeps label content as pages, but whether an internal A&R
-#   guide should be public is still Nate's call (EPSILON-49). No page, no rule;
-#   it 404s until that is decided.
 # - Analytics: none (0003).
 # - DNS and the Netlify domain attachment: deferred by Nate (0003).
