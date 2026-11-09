@@ -28,6 +28,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      # Release gate: fails while any data-required fact (e.g. the privacy
+      # notice's controller and contact) is unfilled, so it is never published.
+      - run: node scripts/check.mjs --release
       - run: npm install --global netlify-cli@17
       - name: Deploy production
         env:

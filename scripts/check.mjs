@@ -7,6 +7,11 @@
 // - every page has a title, a meta description and a canonical link (404 excepted)
 // - sitemap.xml lists every indexable page
 // - pages carrying data-placeholder (content not yet migrated) are listed as warnings
+// - every page's footer links the privacy notice (/privacy/)
+// - data-required="<fact>" marks a fact only Nate can supply (e.g. the privacy
+//   notice's controller and contact). A warning by default, so PR checks stay
+//   green while a draft is reviewed; with --release (the deploy job) it fails,
+//   so production cannot publish a notice with the facts unfilled
 // - every redirect in netlify.toml is well formed, unique, and points at a real
 //   file when its destination is internal
 
@@ -14,6 +19,7 @@ import { readFile, readdir, stat } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
+const release = process.argv.includes("--release");
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const pub = join(root, "public");
 
@@ -101,6 +107,7 @@ async function main() {
 
   const pages = new Set();
   const placeholders = [];
+  const required = [];
   for (const file of html) {
     const rel = relative(pub, file);
     const url = rel.endsWith("index.html") ? "/" + rel.slice(0, -"index.html".length) : "/" + rel;
@@ -109,6 +116,9 @@ async function main() {
     const src = await readFile(file, "utf8");
     const is404 = rel === "404.html";
     if (/data-placeholder/.test(src)) placeholders.push(rel);
+    for (const [, fact] of src.matchAll(/data-required="([^"]+)"/g)) required.push(`${rel}: ${fact}`);
+    const footer = /<footer[\s\S]*<\/footer>/.exec(src)?.[0] ?? "";
+    if (!footer.includes('href="/privacy/"')) problems.push(`${rel}: footer does not link /privacy/`);
     if (!/<title>[^<]+<\/title>/.test(src)) problems.push(`${rel}: no <title>`);
     if (!is404 && !/<meta name="description" content="[^"]+"/.test(src)) {
       problems.push(`${rel}: no meta description`);
@@ -145,6 +155,10 @@ async function main() {
 
   problems.push(...(await checkRedirects(pages)));
 
+  if (release) {
+    for (const r of required) problems.push(`unfilled required fact (release): ${r}`);
+  }
+
   if (problems.length) {
     console.error(`check failed (${problems.length}):`);
     for (const problem of problems) console.error("  - " + problem);
@@ -152,6 +166,7 @@ async function main() {
   }
   // Placeholders are allowed (content still being migrated) but never silent.
   for (const rel of placeholders) console.warn(`warning: ${rel} has placeholder content`);
+  for (const r of required) console.warn(`warning: unfilled required fact: ${r} (fails with --release)`);
   console.log(`check ok: ${html.length} pages, ${locs.length} sitemap urls`);
 }
 
