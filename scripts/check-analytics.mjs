@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import vm from 'node:vm';
+import { trackedPaths } from './analytics-contract.mjs';
 const pub = new URL('../public/', import.meta.url);
 const source = await readFile(new URL('analytics.js', pub), 'utf8');
 const slot = /const token = "([^"]*)";/;
@@ -43,9 +44,12 @@ export async function checkAnalytics() {
   for (const entries of [[], [{ name: safe }, { name: safe }], [{}]]) assert.equal(run({ id, entries }).length, 0);
   assert.equal(run({ id, referrer: null }).length, 0);
   assert.equal(run({ id, broken: true }).length, 0);
-  for (const path of ['/about/', '/contact/', '/erms/', '/audiokit/', '/epsilon-audio/',
-    '/nieuwe-groove-collectief/', '/diverse-records/', '/collective/', '/partners/', '/anr-guide/']) {
+  for (const path of trackedPaths) {
     assert.equal(run({ id, current: safe.slice(0, -1) + path, original: safe.slice(0, -1) + path }).length, 1, path);
+  }
+  for (const path of ['/privacy/', '/404.html', '/unknown/']) {
+    assert.equal(trackedPaths.has(path), false, path + ' must stay untracked in browser and CI expectations');
+    assert.equal(run({ id, current: safe.slice(0, -1) + path, original: safe.slice(0, -1) + path }).length, 0, path);
   }
   async function walk(dir) {
     for (const file of await readdir(dir, { withFileTypes: true })) {
@@ -55,7 +59,8 @@ export async function checkAnalytics() {
       const html = await readFile(url, 'utf8');
       const tags = html.match(/<script src="\/analytics.js" defer><\/script>/g) ?? [];
       // Privacy is independently owned by EPSILON-99 and deliberately untracked.
-      assert.equal(tags.length, file.name === '404.html' || url.pathname.endsWith('/privacy/index.html') ? 0 : 1, url.pathname);
+      const path = '/' + url.href.slice(pub.href.length).replace(/index.html$/, '');
+      assert.equal(tags.length, trackedPaths.has(path) ? 1 : 0, path);
       assert.doesNotMatch(html, /data-cf-beacon|cloudflareinsights\.com|data-site-token/);
       // The static MPA has no URL-mutating scripts or GET forms; anchors/full navigations only.
       assert.doesNotMatch(html, /<form\b|\bonclick\s*=|javascript:|history\.(?:pushState|replaceState)/i);

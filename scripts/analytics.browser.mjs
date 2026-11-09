@@ -4,6 +4,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { trackedPaths } from './analytics-contract.mjs';
 assert.ok(process.env.PLAYWRIGHT_MODULE, 'Set PLAYWRIGHT_MODULE to an existing Playwright index.mjs; this command installs nothing');
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE);
 const loader = await readFile(new URL('../public/analytics.js', import.meta.url), 'utf8');
@@ -33,6 +34,7 @@ const cases = [
   { name: 'bare fragment', url: safe + '#' },
   { name: 'HTTP', url: 'http://epsilonrecords.com/' },
   { name: '404', url: safe + '404.html' },
+  { name: 'privacy is untracked', url: safe + 'privacy/' },
   { name: 'unknown external referrer', referrer: 'https://example.com/reset/' + marker },
   { name: 'safe duplicate loader', allow: true, twice: true },
   { name: 'clean local referrer', referrer: safe + 'about/', allow: true },
@@ -91,7 +93,7 @@ try {
     const page = await context.newPage();
     await page.goto(safe + path);
     await page.waitForLoadState('networkidle');
-    const allowed = path !== '404.html';
+    const allowed = trackedPaths.has('/' + path);
     assert.equal(analytics.filter(r => r.url.includes('beacon.min.js')).length, allowed ? 1 : 0, path);
     const payloads = analytics.filter(r => r.body).map(r => JSON.parse(r.body));
     assert.equal(payloads.length, allowed ? 1 : 0, path);
