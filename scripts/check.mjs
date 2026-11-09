@@ -15,6 +15,7 @@
 // - every redirect in netlify.toml is well formed, unique, and points at a real
 //   file when its destination is internal
 
+import { checkAnalytics } from "./check-analytics.mjs";
 import { readFile, readdir, stat } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -97,6 +98,7 @@ async function checkRedirects(pages) {
 }
 
 async function main() {
+  await checkAnalytics();
   const files = await walk(pub);
   const html = files.filter((f) => f.endsWith(".html"));
   const problems = [];
