@@ -16,6 +16,7 @@ Plain static HTML and one stylesheet, served by Netlify. **No framework, no Tail
 | `/contact/` | `public/contact/index.html` | Email and socials |
 | `/nieuwe-groove-collectief/`, `/diverse-records/`, `/collective/`, `/partners/` | `public/<slug>/index.html` | Label/collective pages kept by [0003](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0003-migration-redirects-host-and-dns.md); copy migrated from `epsilonrecords.nl` |
 | `/anr-guide/` | `public/anr-guide/index.html` | A&R onboarding guide, kept as a public page by [0005](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0005-include-anr-guide.md) |
+| `/privacy/` | `public/privacy/index.html` | Privacy notice, drafted by agents per [shared 0012](https://github.com/epsilon-records/knowledge/blob/main/shared/decisions/0012-agents-draft-privacy-notices.md); linked from every footer |
 | 404 | `public/404.html` | Not-found page (noindex) |
 
 ## Layout
@@ -82,6 +83,8 @@ Decided in [epsilon-web 0003](https://github.com/epsilon-records/knowledge/blob/
 The host rules are inert until the domain is attached to this Netlify site; the cutover is still deferred.
 
 **Placeholders:** content not yet migrated is marked with `data-placeholder` and shown in a dashed amber box, never as real copy. `node scripts/check.mjs` prints a warning for each page that still has one. Don't invent copy to fill them; take it from the old site.
+
+**Required facts:** a fact only Nate can supply (the privacy notice's controller name, address and privacy contact) is additionally marked `data-required="<fact>"`. `node scripts/check.mjs` warns about it; `node scripts/check.mjs --release`, which the deploy job runs before publishing, fails until it is filled. If the privacy notice's facts change (a new vendor, script or font source), update `/privacy/` in the same change.
 
 **Not implemented on purpose:** analytics — none (0003). Do not touch DNS or the Netlify domain attachment.
 

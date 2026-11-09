@@ -739,6 +739,26 @@ h3 {
   color: var(--muted);
 }
 
+/* ------------------------------------------------------------------ Document pages (privacy) */
+
+.doc > p,
+.doc > ul,
+.doc > h3 {
+  max-width: 72ch;
+}
+
+.doc h3 {
+  margin-top: 28px;
+}
+
+.doc ul {
+  padding-left: 1.2em;
+}
+
+.doc li + li {
+  margin-top: 6px;
+}
+
 /* ------------------------------------------------------------------ Placeholders */
 /* Content not yet migrated from the old site. Visible on purpose, so it is
    never mistaken for real copy; scripts/check.mjs lists pages that carry it. */
