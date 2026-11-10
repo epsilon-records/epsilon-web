@@ -17,6 +17,7 @@ Plain static HTML and one stylesheet, served by Netlify. **No framework, no Tail
 | `/nieuwe-groove-collectief/`, `/diverse-records/`, `/collective/`, `/partners/` | `public/<slug>/index.html` | Label/collective pages kept by [0003](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0003-migration-redirects-host-and-dns.md); copy migrated from `epsilonrecords.nl` |
 | `/anr-guide/` | `public/anr-guide/index.html` | A&R onboarding guide, kept as a public page by [0005](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0005-include-anr-guide.md) |
 | `/privacy/` | `public/privacy/index.html` | Privacy notice covering epsilonrecords.com, plugins.epsilonrecords.com and the newsletter (shared 0026), drafted by agents per [shared 0012](https://github.com/epsilon-records/knowledge/blob/main/shared/decisions/0012-agents-draft-privacy-notices.md); linked from every footer |
+| `/check-your-inbox/` | `public/check-your-inbox/index.html` | Newsletter sign-up page: Kit redirects here after the form is submitted, before the subscriber confirms. `noindex`, not in the sitemap, untracked by analytics |
 | `/subscribed/` | `public/subscribed/index.html` | Newsletter confirmation page: Kit redirects subscribers here after they confirm. `noindex`, not in the sitemap, untracked by analytics |
 | 404 | `public/404.html` | Not-found page (noindex) |
 
