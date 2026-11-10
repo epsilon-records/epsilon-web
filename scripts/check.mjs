@@ -5,7 +5,7 @@
 // - required files exist in public/
 // - every internal link in public/**/*.html resolves to a file
 // - every page has a title, a meta description and a canonical link (404 excepted)
-// - sitemap.xml lists every indexable page
+// - sitemap.xml lists every indexable page (noindex pages are exempt)
 // - pages carrying data-placeholder (content not yet migrated) are listed as warnings
 // - every page's footer links the privacy notice (/privacy/)
 // - data-required="<fact>" marks a fact only Nate can supply (e.g. the privacy
@@ -108,6 +108,7 @@ async function main() {
   }
 
   const pages = new Set();
+  const noindex = new Set(); // pages marked noindex stay out of the sitemap
   const placeholders = [];
   const required = [];
   for (const file of html) {
@@ -116,6 +117,7 @@ async function main() {
     pages.add(url);
 
     const src = await readFile(file, "utf8");
+    if (/<meta name="robots" content="noindex">/.test(src)) noindex.add(url);
     const is404 = rel === "404.html";
     if (/data-placeholder/.test(src)) placeholders.push(rel);
     for (const [, fact] of src.matchAll(/data-required="([^"]+)"/g)) required.push(`${rel}: ${fact}`);
@@ -151,7 +153,7 @@ async function main() {
   const sitemap = await readFile(join(pub, "sitemap.xml"), "utf8");
   const locs = [...sitemap.matchAll(/<loc>https:\/\/epsilonrecords\.com([^<]*)<\/loc>/g)].map((m) => m[1]);
   for (const url of pages) {
-    if (url === "/404.html") continue;
+    if (url === "/404.html" || noindex.has(url)) continue;
     if (!locs.includes(url)) problems.push(`sitemap.xml: missing ${url}`);
   }
 
