@@ -9,6 +9,7 @@ const slot = /const token = "([^"]*)";/;
 const configured = source.match(slot)?.[1];
 assert.ok(configured === '' || /^[a-f0-9]{32}$/i.test(configured ?? ''), 'central public ID slot');
 const safe = 'https://epsilonrecords.com/';
+const kitForm = '<form id="signup-form" action="https://app.kit.com/forms/10170855/subscriptions" method="post" target="_blank" rel="noopener">';
 function run({ current = safe, original = safe, referrer = '', id = configured, entries, duplicate = false, broken = false } = {}) {
   const scripts = [];
   const context = vm.createContext({ URL, location: { href: current }, window: {},
@@ -63,7 +64,11 @@ export async function checkAnalytics() {
       assert.equal(tags.length, trackedPaths.has(path) ? 1 : 0, path);
       assert.doesNotMatch(html, /data-cf-beacon|cloudflareinsights\.com|data-site-token/);
       // The static MPA has no URL-mutating scripts or GET forms; anchors/full navigations only.
-      assert.doesNotMatch(html, /<form\b|\bonclick\s*=|javascript:|history\.(?:pushState|replaceState)/i);
+      // The one allowed form is the plain-HTML Kit newsletter POST: no script, no tracking, no other action.
+      const forms = html.match(/<form\b[^>]*>/gi) ?? [];
+      for (const form of forms) assert.equal(form, kitForm, path + ' only the Kit newsletter POST form is allowed');
+      assert.ok(forms.length <= 1, path + ' at most one form');
+      assert.doesNotMatch(html, /\bonclick\s*=|javascript:|history\.(?:pushState|replaceState)/i);
     }
   }
   await walk(pub);
