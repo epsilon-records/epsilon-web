@@ -8,10 +8,10 @@ Plain static HTML and one stylesheet, served by Netlify. **No framework, no Tail
 
 | URL | File | What it is |
 | --- | --- | --- |
-| `/` | `public/index.html` | Landing: label + software positioning, three product cards, Bandcamp strip |
+| `/` | `public/index.html` | Landing: label + software positioning, three product cards, newsletter signup, Bandcamp strip |
 | `/erms/` | `public/erms/index.html` | ERMS → [erms.epsilonrecords.com](https://erms.epsilonrecords.com) |
 | `/audiokit/` | `public/audiokit/index.html` | AudioKit → [audiokit.ai](https://audiokit.ai) and [audiokit.ai/docs](https://audiokit.ai/docs) |
-| `/epsilon-audio/` | `public/epsilon-audio/index.html` | Epsilon Audio → [plugins.epsilonrecords.com](https://plugins.epsilonrecords.com) |
+| `/epsilon-audio/` | `public/epsilon-audio/index.html` | Epsilon Audio → [plugins.epsilonrecords.com](https://plugins.epsilonrecords.com); also carries the newsletter signup |
 | `/about/` | `public/about/index.html` | Label story and the software studio |
 | `/contact/` | `public/contact/index.html` | Email and socials |
 | `/nieuwe-groove-collectief/`, `/diverse-records/`, `/collective/`, `/partners/` | `public/<slug>/index.html` | Label/collective pages kept by [0003](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0003-migration-redirects-host-and-dns.md); copy migrated from `epsilonrecords.nl` |
@@ -20,6 +20,8 @@ Plain static HTML and one stylesheet, served by Netlify. **No framework, no Tail
 | `/check-your-inbox/` | `public/check-your-inbox/index.html` | Newsletter sign-up page: Kit redirects here after the form is submitted, before the subscriber confirms. `noindex`, not in the sitemap, untracked by analytics |
 | `/subscribed/` | `public/subscribed/index.html` | Newsletter confirmation page: Kit redirects subscribers here after they confirm. `noindex`, not in the sitemap, untracked by analytics |
 | 404 | `public/404.html` | Not-found page (noindex) |
+
+The newsletter signup (homepage and `/epsilon-audio/`) is a plain HTML POST to Kit form 10170855, with no Kit script ([shared 0027](https://github.com/epsilon-records/knowledge/blob/main/shared/decisions/0027-subscribe-forms-epsilon-and-audiokit-lists.md)). `scripts/check-analytics.mjs` allows exactly that one form and nothing else.
 
 ## Layout
 
