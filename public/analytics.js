@@ -9,7 +9,7 @@
 
     // Explicit public content routes, not a prefix rule. Review additions for URL exposure.
     const paths = new Set([
-      "/", "/about/", "/contact/", "/erms/", "/audiokit/", "/epsilon-audio/",
+      "/", "/about/", "/contact/", "/labelkit/", "/audiokit/", "/epsilon-audio/",
       "/nieuwe-groove-collectief/", "/diverse-records/", "/collective/", "/partners/", "/anr-guide/",
     ]);
     const clean = (raw, local) => {
