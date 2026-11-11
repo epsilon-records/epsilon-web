@@ -26,13 +26,18 @@ The newsletter signup (homepage and `/epsilon-audio/`) is a plain HTML POST to K
 ## Layout
 
 ```
-public/                 the publish directory: served as-is
-  index.html  erms/  audiokit/  epsilon-audio/  about/  contact/  404.html
-  styles.css            design tokens and all styles (one file)
+public/                       the publish directory: served as-is
+  index.html  404.html        one directory per page otherwise (see Pages)
+  styles.css                  design tokens and all styles (one file)
+  analytics.js                guarded Cloudflare Web Analytics loader (see Analytics)
+  images/labels/              label logos for the label/collective pages
   favicon.svg  robots.txt  sitemap.xml
-netlify.toml            publish dir, security headers, redirects
-scripts/check.mjs       dependency-free link/metadata/sitemap check (CI)
-.github/workflows/ci.yml  runs the check on pushes to main and on PRs
+netlify.toml                  publish dir, security headers, redirects
+scripts/check.mjs             dependency-free link/metadata/sitemap/redirect/privacy check (CI)
+scripts/check-analytics.mjs   analytics loader and HTML coverage checks, run by check.mjs
+scripts/analytics-contract.mjs  the reviewed list of tracked paths, shared by the checks
+scripts/analytics.browser.mjs manual Playwright harness for the loader (not in CI)
+.github/workflows/ci.yml      check on PRs and main; deploy to production from main
 ```
 
 ## Develop
@@ -52,12 +57,12 @@ node scripts/check.mjs
 
 ## Why no build?
 
-Six hand-written pages and one stylesheet don't need templating, and the task was to stay dependency-light. The trade-off is deliberate:
+Fifteen hand-written pages and one stylesheet don't need templating, and the task was to stay dependency-light. The trade-off is deliberate:
 
 - **Header, footer and `<head>` metadata are repeated in each page.** Editing the nav means editing every file; `scripts/check.mjs` catches broken links and missing metadata.
 - **`sitemap.xml` and `robots.txt` are static.** Add a page and you must add it to `sitemap.xml`; the check fails if a page is missing from the sitemap.
 
-Both are fine at this size. If the site grows past a handful of pages, add a small layout step like [`audiokit-web`](https://github.com/epsilon-records/audiokit-web) (`scripts/build.mjs`), which is where this shape came from.
+Both are still manageable at this size, but the repetition is now real. If the site grows much further, add a small layout step like [`audiokit-web`](https://github.com/epsilon-records/audiokit-web) (`scripts/build.mjs`), which is where this shape came from.
 
 ## Design
 
@@ -65,9 +70,11 @@ The "B+C" direction ([epsilon-web 0002](https://github.com/epsilon-records/knowl
 
 ## Deploy
 
-Netlify builds this as a static site: **no build command**, publish directory `public`. Every push to `main` deploys production; pull requests get deploy previews.
+GitHub Actions deploys, not Netlify: Netlify Free can't continuous-deploy a private org repo, so the `deploy` job in `ci.yml` publishes `public/` with the Netlify CLI (`netlify deploy --prod`). It runs only on pushes to `main`, after `check` passes and after `node scripts/check.mjs --release` passes. Pull requests run `check` only. They get **no deploy previews**. There is no build command.
 
-The site is **not yet linked to the `epsilonrecords.com` domain**, and DNS is untouched. That cutover is deferred ([#31 section 5](https://github.com/epsilon-records/knowledge/issues/31)); the redirects that only take effect after cutover are in `netlify.toml`.
+CLI deploys have a null `commit_ref` in Netlify. To match a deploy to a commit, use the deploy title (`github <sha>`).
+
+The domain cutover is **live** (2026-11-08). `epsilonrecords.com` serves this site over HTTPS, `www` 301s to the apex, and the `.nl` hosts 301 to `.com`. Squarespace has been cancelled ([0008](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0008-proceed-with-squarespace-cancellation.md)). The Netlify badge is turned off for this site ([0004](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0004-disable-netlify-badge.md)).
 
 ## Redirects
 
@@ -84,12 +91,22 @@ Decided in [epsilon-web 0003](https://github.com/epsilon-records/knowledge/blob/
 | `/merch`, `/merch/*` | `https://epsilonrecords.bandcamp.com` | 301 |
 | `/join`, `/onboarding`, `/cart`, `/account/*` | — | 410 |
 
-The host rules are inert until the domain is attached to this Netlify site; the cutover is still deferred.
+Since the cutover, the host rules are live.
 
 **Placeholders:** content not yet migrated is marked with `data-placeholder` and shown in a dashed amber box, never as real copy. `node scripts/check.mjs` prints a warning for each page that still has one. Don't invent copy to fill them; take it from the old site.
 
 **Required facts:** a fact only Nate can supply (the privacy notice's controller name, address and privacy contact) is additionally marked `data-required="<fact>"`. `node scripts/check.mjs` warns about it; `node scripts/check.mjs --release`, which the deploy job runs before publishing, fails until it is filled. If the privacy notice's facts change (a new vendor, script or font source), update `/privacy/` in the same change.
 
-**Not implemented on purpose:** analytics — none (0003). Do not touch DNS or the Netlify domain attachment.
+## Analytics
+
+Cloudflare Web Analytics runs on the 11 content pages under [shared 0011](https://github.com/epsilon-records/knowledge/blob/main/shared/decisions/0011-cloudflare-web-analytics.md). That decision replaces the "no analytics" clause in 0003. It uses no other vendor. Cloudflare says its beacon uses no cookies or browser storage.
+
+- Each tracked page loads `/analytics.js` once. The loader is fail-closed. It injects the beacon only on `https://epsilonrecords.com`, and only when the current URL, the navigation entry and any referrer are exact paths from its allowlist with no query or fragment.
+- `/privacy/`, `/check-your-inbox/`, `/subscribed/` and the 404 page are not tracked.
+- **Adding a tracked page:** add its path to the `paths` set in `public/analytics.js` *and* to `scripts/analytics-contract.mjs`. `check.mjs` fails in two cases: a contract path the loader would not track, or a page whose script tag doesn't match the contract. Keep `/privacy/` accurate in the same change.
+- An empty `token` in `analytics.js` turns collection off completely.
+- `scripts/analytics.browser.mjs` is a manual end-to-end check against real Chrome. It installs nothing: point `PLAYWRIGHT_MODULE` at an existing Playwright install.
+
+**Hands off:** DNS and the Netlify domain attachment. Changes to either go through Nate.
 
 — epsilon-web agent

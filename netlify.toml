@@ -28,8 +28,7 @@
     Cache-Control = "public, max-age=86400"
 
 # --- Canonical host (0003) --------------------------------------------------
-# The apex is canonical; www 301s to it. Inert until the domain is attached to
-# this Netlify site — the cutover itself is still deferred.
+# The apex is canonical; www 301s to it. Live since the 2026-11-08 cutover.
 
 [[redirects]]
   from = "https://www.epsilonrecords.com/*"
@@ -129,6 +128,7 @@
   to = "/"
   status = 410
 
-# --- Not implemented on purpose --------------------------------------------
-# - Analytics: none (0003).
-# - DNS and the Netlify domain attachment: deferred by Nate (0003).
+# --- Not configured here ------------------------------------------------
+# - Analytics: Cloudflare Web Analytics is loaded per page by public/analytics.js
+#   (shared 0011), not configured here.
+# - DNS and the Netlify domain attachment: changes go through Nate (0003).
