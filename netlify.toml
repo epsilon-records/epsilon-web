@@ -11,13 +11,13 @@
 
 # The Content-Security-Policy allows what the pages load (EPSILON-118): Google Fonts, the
 # Cloudflare Web Analytics beacon (shared 0011) and the Kit signup form's POST (shared 0027),
-# whose redirect returns to epsilonrecords.com. The pages carry no inline scripts or styles;
+# whose redirect returns to epsilonrecords.com ('self'). The pages carry no inline scripts or styles;
 # scripts/check.mjs fails if one appears. JSON-LD blocks are data, not scripts, so CSP ignores them.
 [[headers]]
   for = "/*"
   [headers.values]
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'self' https://cloudflareinsights.com; form-action 'self' https://app.kit.com https://epsilonrecords.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'self' https://cloudflareinsights.com; form-action 'self' https://app.kit.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "DENY"
