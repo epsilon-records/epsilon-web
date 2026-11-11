@@ -12,10 +12,13 @@
 //   notice's controller and contact). A warning by default, so PR checks stay
 //   green while a draft is reviewed; with --release (the deploy job) it fails,
 //   so production cannot publish a notice with the facts unfilled
+// - every page fits the Content-Security-Policy in netlify.toml: no inline scripts,
+//   styles or event handlers, and every script, stylesheet and form target is allowed
 // - every redirect in netlify.toml is well formed, unique, and points at a real
 //   file when its destination is internal
 
 import { checkAnalytics } from "./check-analytics.mjs";
+import { checkCsp } from "./check-csp.mjs";
 import { readFile, readdir, stat } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -107,6 +110,7 @@ async function main() {
     if (!(await exists(join(pub, rel)))) problems.push(`missing public/${rel}`);
   }
 
+  const csp = await readFile(join(root, "netlify.toml"), "utf8");
   const pages = new Set();
   const noindex = new Set(); // pages marked noindex stay out of the sitemap
   const placeholders = [];
@@ -121,6 +125,7 @@ async function main() {
     const is404 = rel === "404.html";
     if (/data-placeholder/.test(src)) placeholders.push(rel);
     for (const [, fact] of src.matchAll(/data-required="([^"]+)"/g)) required.push(`${rel}: ${fact}`);
+    problems.push(...checkCsp(rel, src, csp));
     const footer = /<footer[\s\S]*<\/footer>/.exec(src)?.[0] ?? "";
     if (!footer.includes('href="/privacy/"')) problems.push(`${rel}: footer does not link /privacy/`);
     if (!/<title>[^<]+<\/title>/.test(src)) problems.push(`${rel}: no <title>`);
