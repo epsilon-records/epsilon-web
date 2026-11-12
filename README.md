@@ -66,7 +66,7 @@ Both are still manageable at this size, but the repetition is now real. If the s
 
 ## Design
 
-The "B+C" direction ([epsilon-web 0002](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0002-private-static-site-b-plus-c.md), [ERMS 0009](https://github.com/epsilon-records/knowledge/blob/main/erms/decisions/0009-ui-direction-b-plus-c.md)): dark ground, one lime accent, a Swiss-grid structure, IBM Plex Sans + Mono, thin rules and square corners. The tokens at the top of `public/styles.css` are the same ones the ERMS UI uses, so the front doors share one language.
+The "B+C" direction ([epsilon-web 0002](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0002-private-static-site-b-plus-c.md), [ERMS 0009](https://github.com/epsilon-records/knowledge/blob/main/labelkit/decisions/0009-ui-direction-b-plus-c.md)): dark ground, one lime accent, a Swiss-grid structure, IBM Plex Sans + Mono, thin rules and square corners. The tokens at the top of `public/styles.css` are the same ones the ERMS UI uses, so the front doors share one language.
 
 ## Deploy
 
