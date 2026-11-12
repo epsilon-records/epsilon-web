@@ -10,7 +10,7 @@
   publish = "public"
   # storybook-hub/ is a different Netlify site (shared 0066). Commits that only touch it skip this
   # site's deploy (15 Free-plan credits each); an uncached build (equal refs) always deploys.
-  ignore = "[ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)storybook-hub'"
+  ignore = "[ -n \"$CACHED_COMMIT_REF\" ] && [ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)storybook-hub'"
 
 # The Content-Security-Policy allows what the pages load (EPSILON-118): self-hosted fonts, the
 # Cloudflare Web Analytics beacon (shared 0011) and the Kit signup form's POST (shared 0027),
