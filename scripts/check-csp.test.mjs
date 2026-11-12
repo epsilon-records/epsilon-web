@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { checkCsp, checkPolicy } from "./check-csp.mjs";
 
 const POLICY =
-  "default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'self' https://cloudflareinsights.com; form-action 'self' https://app.kit.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'";
+  "default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'self' https://cloudflareinsights.com; form-action 'self' https://app.kit.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'";
 const toml = (csp = POLICY, hsts = "max-age=31536000; includeSubDomains") => `[[headers]]
   for = "/*"
   [headers.values]
@@ -52,6 +52,8 @@ const BAD = [
   `<iframe src="https://bandcamp.com/EmbeddedPlayer/album=1"></iframe>`,
   `<embed src="/x.swf">`,
   `<object data="/x.pdf"></object>`,
+  // Google Fonts is no longer allowed: the fonts are self-hosted.
+  `<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans" rel="stylesheet">`,
   // Form targets.
   `<form action='https://evil.example/post'></form>`,
   `<form action=https://evil.example/post></form>`,
@@ -65,8 +67,6 @@ const GOOD = [
   `<script type="Application/LD+JSON">{}</script>`,
   `<script src="/analytics.js" defer></script>`,
   `<link rel="stylesheet" href="/styles.css">`,
-  `<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans" rel="stylesheet">`,
-  `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`,
   `<link rel="icon" href="/favicon.svg" type="image/svg+xml">`,
   `<link rel="canonical" href="https://epsilonrecords.com/">`,
   `<img src="/images/a.png" srcset="/images/a.png 1x, https://epsilonrecords.com/images/b.png 2x" alt="">`,
