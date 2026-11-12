@@ -1162,3 +1162,35 @@ small a {
 .signup small {
   color: var(--muted);
 }
+
+/* ------------------------------------------------------------------ 404: locked groove
+   The label site's 404 wink (shared/design/components.md): a record with one closed
+   groove picked out in the accent and the needle resting in it. Static SVG. */
+
+.groove-page .groove {
+  margin: 0 0 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.groove figcaption {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.groove-disc { fill: var(--surface-2); stroke: var(--line); }
+.groove-ring { fill: none; stroke: var(--line); stroke-width: 1; }
+.groove-locked { fill: none; stroke: var(--accent); stroke-width: 2; }
+.groove-label { fill: var(--accent); }
+.groove-hole { fill: var(--bg); }
+.groove-arm { fill: none; stroke: var(--soft); stroke-width: 3; stroke-linecap: square; stroke-linejoin: round; }
+.groove-pivot { fill: var(--surface); stroke: var(--line-control); stroke-width: 1.5; }
+.groove-head { fill: var(--soft); }
+
+@media (max-width: 640px) {
+  .groove svg { width: 160px; height: 160px; }
+}
