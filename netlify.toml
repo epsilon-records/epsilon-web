@@ -23,10 +23,13 @@
     X-Frame-Options = "DENY"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
+# The stylesheet's URL never changes, so a max-age let returning visitors pair new
+# HTML with up to an hour-old CSS after a deploy (seen on epsilon-web#18). Revalidate
+# every time instead: Netlify answers with its ETag, so an unchanged file costs a 304.
 [[headers]]
   for = "/styles.css"
   [headers.values]
-    Cache-Control = "public, max-age=3600"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/favicon.svg"
