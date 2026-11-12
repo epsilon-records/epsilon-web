@@ -20,6 +20,9 @@
   --accent: #c6f432;
   --on-accent: #0e0f11;
   --warn: #ffd166;
+  --line-control: #646a73;
+  --pulse: 484ms; /* one beat at 124 BPM */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
   --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
@@ -374,6 +377,126 @@ h3 {
   margin: 0;
   color: var(--text);
   text-align: right;
+}
+
+/* ------------------------------------------------------------------ Home hero: one bar (epsilon-web 0009)
+   Sixteen steps, one bar at 124 BPM. On load the bar plays once in real
+   time (a sixteenth per step), then rests with the downbeat lit. CSS only;
+   prefers-reduced-motion shows the resting state. */
+
+.hero-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 32px;
+}
+
+.hero-bar .display {
+  margin: 0;
+  max-width: 14ch;
+  font-size: clamp(2.375rem, -0.3rem + 9.2vw, 8rem);
+  line-height: 0.94;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: repeat(16, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.bar span {
+  height: 48px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  animation: bar-hit calc(var(--pulse) / 2) var(--ease-out) 1;
+}
+
+.bar span:nth-child(4n + 1) {
+  border-color: var(--line-control);
+}
+
+.bar span:first-child {
+  background: var(--accent);
+  border-color: var(--accent);
+  animation-name: bar-downbeat;
+}
+
+.bar span:nth-child(2) { animation-delay: calc(var(--pulse) / 4 * 1); }
+.bar span:nth-child(3) { animation-delay: calc(var(--pulse) / 4 * 2); }
+.bar span:nth-child(4) { animation-delay: calc(var(--pulse) / 4 * 3); }
+.bar span:nth-child(5) { animation-delay: calc(var(--pulse) / 4 * 4); }
+.bar span:nth-child(6) { animation-delay: calc(var(--pulse) / 4 * 5); }
+.bar span:nth-child(7) { animation-delay: calc(var(--pulse) / 4 * 6); }
+.bar span:nth-child(8) { animation-delay: calc(var(--pulse) / 4 * 7); }
+.bar span:nth-child(9) { animation-delay: calc(var(--pulse) / 4 * 8); }
+.bar span:nth-child(10) { animation-delay: calc(var(--pulse) / 4 * 9); }
+.bar span:nth-child(11) { animation-delay: calc(var(--pulse) / 4 * 10); }
+.bar span:nth-child(12) { animation-delay: calc(var(--pulse) / 4 * 11); }
+.bar span:nth-child(13) { animation-delay: calc(var(--pulse) / 4 * 12); }
+.bar span:nth-child(14) { animation-delay: calc(var(--pulse) / 4 * 13); }
+.bar span:nth-child(15) { animation-delay: calc(var(--pulse) / 4 * 14); }
+.bar span:nth-child(16) { animation-delay: calc(var(--pulse) / 4 * 15); }
+
+@keyframes bar-hit {
+  0%, 45% { background: var(--accent); border-color: var(--accent); }
+  100% { background: var(--surface); }
+}
+
+@keyframes bar-downbeat {
+  from { background: var(--accent); }
+  to { background: var(--accent); }
+}
+
+.bar-caption {
+  margin: -16px 0 0;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.hero-foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .hero-foot {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-bar {
+    gap: 24px;
+  }
+
+  .hero-bar .display {
+    font-size: clamp(2.125rem, 9.75vw, 2.375rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+  }
+
+  .bar {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .bar span {
+    height: 28px;
+  }
+
+  .bar span:nth-child(n + 9) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar span {
+    animation: none;
+  }
 }
 
 /* ------------------------------------------------------------------ Sections */
