@@ -110,7 +110,7 @@ async function main() {
   const html = files.filter((f) => f.endsWith(".html"));
   const problems = [];
 
-  for (const rel of ["index.html", "404.html", "styles.css", "favicon.svg", "sitemap.xml", "robots.txt", "llms.txt", "images/og.png", "images/logo.png"]) {
+  for (const rel of ["index.html", "404.html", "styles.css", "favicon.svg", "sitemap.xml", "robots.txt", "llms.txt", "favicon.ico", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "site.webmanifest", "images/og.png", "images/logo.png"]) {
     if (!(await exists(join(pub, rel)))) problems.push(`missing public/${rel}`);
   }
 

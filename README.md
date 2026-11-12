@@ -33,6 +33,7 @@ public/                       the publish directory: served as-is
   analytics.js                guarded Cloudflare Web Analytics loader (see Analytics)
   images/labels/              label logos for the label/collective pages
   favicon.svg  robots.txt  sitemap.xml  llms.txt (summary for AI models)
+  favicon.ico  apple-touch-icon.png  icon-192.png  icon-512.png  site.webmanifest   the Epsilon "E" icon set
   images/og.png  images/logo.png   share card (1200×630) and square logo used by Open Graph and JSON-LD
 netlify.toml                  publish dir, security headers, redirects
 scripts/check.mjs             dependency-free link/metadata/sitemap/redirect/privacy check (CI)
