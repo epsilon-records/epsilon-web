@@ -14,6 +14,7 @@ Plain static HTML and one stylesheet, served by Netlify. **No framework, no Tail
 | `/epsilon-audio/` | `public/epsilon-audio/index.html` | Epsilon Audio → [plugins.epsilonrecords.com](https://plugins.epsilonrecords.com); also carries the newsletter signup |
 | `/about/` | `public/about/index.html` | Label story and the software studio |
 | `/contact/` | `public/contact/index.html` | Email and socials |
+| `/demos/` | `public/demos/index.html` | How to send a demo: one email to demos@epsilonrecords.com with a private link ([epsilon-web 0010](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0010-demos-page-email-now-labelkit-later.md)); intake moves into LabelKit later |
 | `/nieuwe-groove-collectief/`, `/diverse-records/`, `/collective/`, `/partners/` | `public/<slug>/index.html` | Label/collective pages kept by [0003](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0003-migration-redirects-host-and-dns.md); copy migrated from `epsilonrecords.nl` |
 | `/anr-guide/` | `public/anr-guide/index.html` | A&R onboarding guide, kept as a public page by [0005](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0005-include-anr-guide.md) |
 | `/privacy/` | `public/privacy/index.html` | Privacy notice covering epsilonrecords.com, plugins.epsilonrecords.com and the newsletter (shared 0026), drafted by agents per [shared 0012](https://github.com/epsilon-records/knowledge/blob/main/shared/decisions/0012-agents-draft-privacy-notices.md); linked from every footer |
