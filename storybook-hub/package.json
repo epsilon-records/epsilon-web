@@ -1,0 +1,15 @@
+{
+	"name": "epsilon-storybook-hub",
+	"private": true,
+	"description": "The Epsilon Storybook hub at storybook.epsilonrecords.com (shared 0064-0066). Not part of epsilonrecords.com, which stays buildless.",
+	"type": "module",
+	"scripts": {
+		"storybook": "storybook dev -p 6007",
+		"build": "storybook build -o dist"
+	},
+	"devDependencies": {
+		"@storybook/html-vite": "^10.6.7",
+		"storybook": "^10.6.7",
+		"vite": "^8.3.8"
+	}
+}

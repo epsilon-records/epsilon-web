@@ -1,0 +1,19 @@
+# The storybook.epsilonrecords.com hub: Netlify site epsilon-storybook, base directory
+# storybook-hub/ (shared 0064–0066). epsilonrecords.com itself stays buildless and ignores this
+# folder. Each production deploy costs 15 Free-plan credits, so this builds only when this folder
+# changes; an uncached build (equal refs) always builds.
+[build]
+  command = "npm ci && npm run build"
+  publish = "dist"
+  ignore = "[ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Robots-Tag = "noindex"
