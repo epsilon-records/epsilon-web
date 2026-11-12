@@ -2,5 +2,5 @@
 // Keep this reviewed list in sync with the production loader; unknown documents are untracked.
 export const trackedPaths = new Set([
   '/', '/about/', '/contact/', '/labelkit/', '/audiokit/', '/epsilon-audio/',
-  '/nieuwe-groove-collectief/', '/diverse-records/', '/collective/', '/partners/', '/anr-guide/',
+  '/nieuwe-groove-collectief/', '/diverse-records/', '/collective/', '/partners/', '/anr-guide/', '/demos/',
 ]);
