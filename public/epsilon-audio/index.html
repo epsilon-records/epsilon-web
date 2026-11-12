@@ -18,6 +18,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/fonts.css">
 <link rel="stylesheet" href="/styles.css">
+<script src="/nav.js" defer></script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Epsilon Audio","applicationCategory":"MultimediaApplication","operatingSystem":"macOS, Windows, Linux","url":"https://plugins.epsilonrecords.com","description":"Fifteen free, open-source instruments and effects: synths, filters, delay, reverb, distortion, EQ and dynamics.","publisher":{"@type":"Organization","name":"Epsilon Records"}}
 </script>
@@ -32,7 +33,8 @@
       <span class="brand-mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="8" y="8" width="16" height="3.4" fill="currentColor"/><rect x="8" y="14.3" width="12" height="3.4" fill="currentColor"/><rect x="8" y="20.6" width="16" height="3.4" fill="currentColor"/><rect x="8" y="8" width="3.4" height="16" fill="currentColor"/></svg></span>
       Epsilon Records
     </a>
-    <nav class="nav-links" aria-label="Main">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav-links" id="site-nav" aria-label="Main">
       <a href="/labelkit/">LabelKit</a>
       <a href="/audiokit/">AudioKit</a>
       <a href="/epsilon-audio/" aria-current="page">Epsilon Audio</a>
