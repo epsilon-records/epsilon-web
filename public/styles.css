@@ -399,6 +399,10 @@ h3 {
 }
 
 .bar {
+  /* align-self, not the parent's align-items: the 1000 px .hero rule sets
+     align-items: start, which shrank this empty grid to zero width. */
+  align-self: stretch;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(16, minmax(0, 1fr));
   gap: 8px;
