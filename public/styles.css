@@ -193,6 +193,70 @@ code {
   border-bottom-color: var(--accent);
 }
 
+/* Phone navigation (design audit F-16): under 760 px the links fold behind a
+   Menu disclosure instead of wrapping onto a second row. Only when scripts run;
+   without them the links wrap as before. nav.js toggles .is-open. */
+
+.nav-toggle {
+  display: none;
+}
+
+@media (max-width: 760px) and (scripting: enabled) {
+  .site-header .nav {
+    flex-wrap: wrap;
+    gap: 0 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0 16px;
+    border: 1px solid var(--line-control);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  .nav-toggle[aria-expanded="true"] {
+    background: var(--surface);
+  }
+
+  .nav-links {
+    display: none;
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding-top: 4px;
+  }
+
+  .nav-links.is-open {
+    display: flex;
+  }
+
+  .nav-links a:not(.btn) {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-links a[aria-current="page"] {
+    border-bottom-color: var(--line);
+    box-shadow: inset 2px 0 0 var(--accent);
+    padding-left: 12px;
+  }
+
+  .nav-links .btn {
+    margin-top: 12px;
+    align-self: flex-start;
+  }
+}
+
 /* ------------------------------------------------------------------ Buttons */
 
 .btn {
