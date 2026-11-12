@@ -32,7 +32,8 @@ public/                       the publish directory: served as-is
   styles.css                  design tokens and all styles (one file)
   analytics.js                guarded Cloudflare Web Analytics loader (see Analytics)
   images/labels/              label logos for the label/collective pages
-  favicon.svg  robots.txt  sitemap.xml
+  favicon.svg  robots.txt  sitemap.xml  llms.txt (summary for AI models)
+  images/og.png  images/logo.png   share card (1200×630) and square logo used by Open Graph and JSON-LD
 netlify.toml                  publish dir, security headers, redirects
 scripts/check.mjs             dependency-free link/metadata/sitemap/redirect/privacy check (CI)
 scripts/check-analytics.mjs   analytics loader and HTML coverage checks, run by check.mjs

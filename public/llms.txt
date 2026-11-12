@@ -1,0 +1,36 @@
+# Epsilon Records
+
+> Epsilon Records is an independent, techno-oriented electronic dance music record label based in Amsterdam, Netherlands, founded by Nate Houk and active since 2015. Its tagline is "Beautiful Techno". The label covers acid techno to deep house and trance to progressive, runs parties and a Discord community, and releases music on Bandcamp. It is also a software studio that builds LabelKit, AudioKit and Epsilon Audio.
+
+Official website: https://epsilonrecords.com (epsilonrecords.nl redirects here). Releases: https://epsilonrecords.bandcamp.com. Contact: hello@epsilonrecords.com. Demos: demos@epsilonrecords.com.
+
+Epsilon Records is not Delsin Records, Darin Epsilon, or other similarly named labels and artists.
+
+## The label
+
+- [About](https://epsilonrecords.com/about/): the label's story, founders, values and the software studio
+- [Collective](https://epsilonrecords.com/collective/): the community-based collective behind the label
+- [Nieuwe Groove Collectief](https://epsilonrecords.com/nieuwe-groove-collectief/): a label/collective page of Epsilon Records
+- [Diverse Records](https://epsilonrecords.com/diverse-records/): a label page of Epsilon Records
+- [Partners](https://epsilonrecords.com/partners/): partners of the label
+- [Send a demo](https://epsilonrecords.com/demos/): how artists submit demos
+- [A&R guide](https://epsilonrecords.com/anr-guide/): how the label works with signed artists
+- [Contact](https://epsilonrecords.com/contact/): email and social profiles
+
+## Software
+
+- [LabelKit](https://epsilonrecords.com/labelkit/): label software for independent labels (releases, recordings, splits, agreements, consents, masters)
+- [AudioKit](https://epsilonrecords.com/audiokit/): an audio analysis and processing API (loudness, tempo, key, fingerprints, genre and mood, transcodes)
+- [Epsilon Audio](https://epsilonrecords.com/epsilon-audio/): software instruments and plugins for music makers
+
+## Elsewhere
+
+- [Bandcamp](https://epsilonrecords.bandcamp.com): releases and merch
+- [SoundCloud](https://soundcloud.com/epsilonrecords)
+- [Instagram](https://www.instagram.com/epsilonrecords/)
+- [YouTube](https://youtube.com/epsilonrecords)
+- [Mixcloud](https://mixcloud.com/epsilonrecords)
+
+## Optional
+
+- [Privacy notice](https://epsilonrecords.com/privacy/)
