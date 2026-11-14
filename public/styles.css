@@ -265,7 +265,7 @@ code {
   justify-content: center;
   min-height: 44px;
   padding: 0 18px;
-  border: 1px solid #3a3f46;
+  border: 1px solid var(--line-control);
   border-radius: 0;
   background: transparent;
   color: var(--text);
@@ -1147,12 +1147,17 @@ small a {
   min-width: 0;
   min-height: 44px;
   padding: 0 14px;
-  border: 1px solid #3a3f46;
+  border: 1px solid var(--line-control);
   border-radius: 0;
   background: var(--surface);
   color: var(--text);
   font: inherit;
   font-size: 15px;
+}
+
+.signup input[type="email"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 .signup input[type="email"]::placeholder {
