@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Manual re-run of check + deploy on main, for when a push event is lost.
+  workflow_dispatch:
+
+# Least privilege: jobs only read the repo; Netlify uses its own token.
+permissions:
+  contents: read
 
 jobs:
   check:
@@ -20,8 +26,12 @@ jobs:
   # (deploy_private_corp_repos=false → "Unsupported repository type").
   # Publish via the CLI instead; keeps the repo private (decision 0002 / 0006).
   deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     needs: check
+    # One production deploy at a time; queued runs wait instead of overlapping.
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
