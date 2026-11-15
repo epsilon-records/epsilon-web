@@ -8,7 +8,7 @@ Plain static HTML and one stylesheet, served by Netlify. **No framework, no Tail
 
 | URL | File | What it is |
 | --- | --- | --- |
-| `/` | `public/index.html` | Landing: label + software positioning, three product cards, newsletter signup, Bandcamp strip |
+| `/` | `public/index.html` | Landing: label + software positioning, three product cards, newsletter signup, Bandcamp strip; one hand-edited "This week from the archive" line under The label (changed with the Monday post) |
 | `/erms/` | `public/erms/index.html` | ERMS → [erms.epsilonrecords.com](https://erms.epsilonrecords.com) |
 | `/audiokit/` | `public/audiokit/index.html` | AudioKit → [audiokit.ai](https://audiokit.ai) and [audiokit.ai/docs](https://audiokit.ai/docs) |
 | `/epsilon-audio/` | `public/epsilon-audio/index.html` | Epsilon Audio → [plugins.epsilonrecords.com](https://plugins.epsilonrecords.com); also carries the newsletter signup |
