@@ -108,9 +108,10 @@ async function checkRedirects(pages) {
 // in the home page's Organization sameAs.
 async function checkLlms(locs) {
   const problems = [];
-  const llms = await readFile(join(pub, "llms.txt"), "utf8");
-  // Every destination, whatever its scheme, so an http:// link can't slip past.
-  const destinations = (text) => [...text.matchAll(/\]\(([^)\s]+)\)/g)].map((m) => m[1]);
+  // CRLF-safe, so an editor's line endings can't hide the Elsewhere section.
+  const llms = (await readFile(join(pub, "llms.txt"), "utf8")).replace(/\r\n?/g, "\n");
+  // Every inline-link destination, whatever its scheme and with or without a "title".
+  const destinations = (text) => [...text.matchAll(/\]\(\s*<?([^)\s>]+)>?(?:\s+"[^"]*")?\s*\)/g)].map((m) => m[1]);
   for (const dest of destinations(llms)) {
     let url;
     try {
@@ -120,13 +121,21 @@ async function checkLlms(locs) {
       continue;
     }
     if (!/^(www\.)?epsilonrecords\.com$/.test(url.hostname)) continue;
-    if (url.protocol !== "https:" || url.hostname !== "epsilonrecords.com") {
+    if (url.origin !== "https://epsilonrecords.com") {
       problems.push(`llms.txt: ${dest} should be https://epsilonrecords.com${url.pathname}`);
     }
     if (!locs.includes(url.pathname)) problems.push(`llms.txt: ${url.pathname} is not a sitemap page`);
   }
   const home = await readFile(join(pub, "index.html"), "utf8");
-  const sameAs = JSON.parse(/"sameAs":(\[[^\]]*\])/.exec(home)?.[1] ?? "[]");
+  // sameAs of the home page's Organization node, read from its JSON-LD, not the first match.
+  const nodes = [...home.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+    .flatMap((m) => {
+      const data = JSON.parse(m[1]);
+      return data["@graph"] ?? (Array.isArray(data) ? data : [data]);
+    });
+  const org = nodes.find((n) => n["@type"] === "Organization" && n.url?.replace(/\/$/, "") === "https://epsilonrecords.com")
+    ?? nodes.find((n) => n["@type"] === "Organization");
+  const sameAs = org?.sameAs ?? [];
   const elsewhere = /## Elsewhere\n([\s\S]*?)(\n## |$)/.exec(llms)?.[1] ?? "";
   const listed = destinations(elsewhere);
   for (const url of sameAs) {
