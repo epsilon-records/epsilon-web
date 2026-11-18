@@ -116,7 +116,12 @@ export function descriptionDrift(desc, pageText) {
   const missing = own.filter((w) => !page.has(w));
   return own.length && missing.length / own.length > 0.3 ? `uses words the page doesn't (${missing.join(", ")})` : null;
 }
+// "- [Name](page): description" entries, with any Markdown bullet (-, * or +), possibly indented.
+const llmsEntries = (text) =>
+  [...text.matchAll(/^\s*[-*+]\s+\[[^\]]+\]\((https:\/\/epsilonrecords\.com\/[^)\s]*)\):\s*(.+)$/gm)].map((m) => [m[1], m[2]]);
 function checkDescriptionFixtures() {
+  const star = llmsEntries("* [LabelKit](https://epsilonrecords.com/labelkit/): a label page of Epsilon Records");
+  if (star.length !== 1 || !descriptionDrift(star[0][1], "LabelKit")) throw new Error("description fixture: an asterisk-bullet placeholder should be checked and fail");
   const page = "Nieuwe Groove Collectief is an Amsterdam sublabel of Epsilon Records, launched in 2024, for organic electronic, future soul, nu-disco and funky house.";
   if (descriptionDrift("an Amsterdam sublabel of Epsilon Records, launched in 2024, for organic electronic, future soul, nu-disco and funky house", page)) throw new Error("description fixture: current description should pass");
   if (!descriptionDrift("a Berlin label for drum and bass, hardstyle and gabber", page)) throw new Error("description fixture: wrong description should fail");
@@ -147,7 +152,7 @@ async function checkLlms(locs) {
     if (!locs.includes(url.pathname)) problems.push(`llms.txt: ${url.pathname} is not a sitemap page`);
   }
   // Each "- [Name](page): description" entry must agree with the page it links.
-  for (const [, href, desc] of llms.matchAll(/^- \[[^\]]+\]\((https:\/\/epsilonrecords\.com\/[^)\s]*)\):\s*(.+)$/gm)) {
+  for (const [href, desc] of llmsEntries(llms)) {
     const path = new URL(href).pathname;
     const file = join(pub, path, "index.html");
     if (!(await exists(file))) continue;
