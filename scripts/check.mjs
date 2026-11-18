@@ -103,6 +103,29 @@ async function checkRedirects(pages) {
   return problems;
 }
 
+// llms.txt is what AI assistants read about the label, so it must agree with the site:
+// every epsilonrecords.com link is a sitemap page, and "Elsewhere" lists exactly the profiles
+// in the home page's Organization sameAs.
+async function checkLlms(locs) {
+  const problems = [];
+  const llms = await readFile(join(pub, "llms.txt"), "utf8");
+  for (const [, path] of llms.matchAll(/\]\(https:\/\/epsilonrecords\.com(\/[^)]*)\)/g)) {
+    if (!locs.includes(path)) problems.push(`llms.txt: ${path} is not a sitemap page`);
+  }
+  const home = await readFile(join(pub, "index.html"), "utf8");
+  const sameAs = JSON.parse(/"sameAs":(\[[^\]]*\])/.exec(home)?.[1] ?? "[]");
+  const elsewhere = /## Elsewhere\n([\s\S]*?)(\n## |$)/.exec(llms)?.[1] ?? "";
+  const listed = [...elsewhere.matchAll(/\]\((https:[^)]+)\)/g)].map((m) => m[1]);
+  for (const url of sameAs) {
+    if (!listed.includes(url)) problems.push(`llms.txt: Elsewhere is missing ${url} (in sameAs)`);
+  }
+  for (const url of listed) {
+    if (!sameAs.includes(url)) problems.push(`llms.txt: Elsewhere lists ${url}, which sameAs does not`);
+  }
+  if (sameAs.length === 0) problems.push("index.html: no Organization sameAs found");
+  return problems;
+}
+
 async function main() {
   await checkAnalytics();
   checkCspFixtures();
@@ -167,6 +190,7 @@ async function main() {
     if (!locs.includes(url)) problems.push(`sitemap.xml: missing ${url}`);
   }
 
+  problems.push(...(await checkLlms(locs)));
   problems.push(...(await checkRedirects(pages)));
 
   if (release) {
