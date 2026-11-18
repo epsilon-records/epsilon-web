@@ -119,12 +119,14 @@ export function descriptionDrift(desc, pageText) {
 }
 // "- [Name](page): description" entries, with any Markdown bullet (-, * or +), possibly indented.
 const llmsEntries = (text) =>
-  [...text.matchAll(/^\s*[-*+]\s+\[[^\]]+\]\(\s*<?(https:\/\/epsilonrecords\.com\/[^)\s>]*)>?\s*\):[ \t]*(.*)$/gm)].map((m) => [m[1], m[2].trim()]);
+  [...text.matchAll(/^\s*[-*+]\s+\[[^\]]+\]\(\s*<?(https:\/\/epsilonrecords\.com\/[^)\s>]*)>?(?:\s+"[^"]*")?\s*\):[ \t]*(.*)$/gm)].map((m) => [m[1], m[2].trim()]);
 function checkDescriptionFixtures() {
   const star = llmsEntries("* [LabelKit](https://epsilonrecords.com/labelkit/): a label page of Epsilon Records");
   if (star.length !== 1 || !descriptionDrift(star[0][1], "LabelKit")) throw new Error("description fixture: an asterisk-bullet placeholder should be checked and fail");
   const angled = llmsEntries("- [LabelKit](<https://epsilonrecords.com/labelkit/>): a label page of Epsilon Records");
   if (angled.length !== 1 || angled[0][0] !== "https://epsilonrecords.com/labelkit/" || !descriptionDrift(angled[0][1], "LabelKit")) throw new Error("description fixture: an angle-bracketed link should be checked and fail");
+  const titled = llmsEntries('- [LabelKit](https://epsilonrecords.com/labelkit/ "LabelKit"): a label page of Epsilon Records');
+  if (titled.length !== 1 || !descriptionDrift(titled[0][1], "LabelKit")) throw new Error("description fixture: a titled link should be checked and fail");
   const empty = llmsEntries("- [LabelKit](https://epsilonrecords.com/labelkit/):");
   if (empty.length !== 1 || descriptionDrift(empty[0][1], "LabelKit") !== "is empty") throw new Error("description fixture: an empty description should fail");
   const page = "Nieuwe Groove Collectief is an Amsterdam sublabel of Epsilon Records, launched in 2024, for organic electronic, future soul, nu-disco and funky house.";
