@@ -16,6 +16,7 @@
 //   and every page fits that CSP: no inline scripts, styles or event handlers, and every
 //   URL a page loads or submits to is allowed (scripts/check-csp.mjs, fixtures in
 //   scripts/check-csp.test.mjs)
+// - every llms.txt page entry agrees with its page (descriptionDrift, fixtures in checkDescriptionFixtures)
 // - every redirect in netlify.toml is well formed, unique, and points at a real
 //   file when its destination is internal
 
@@ -103,6 +104,25 @@ async function checkRedirects(pages) {
   return problems;
 }
 
+// A page entry in llms.txt drifts from its page when the summary uses words the page doesn't:
+// at least 70% of its content words (5+ letters) must appear in the page's text. The generic
+// placeholders the descriptions replaced always fail.
+const GENERIC = [/^an? (label\/collective|label) page of epsilon records$/i, /^partners of the label$/i];
+const words = (t) => (t.replace(/\(?https?:\/\/\S+/g, " ").toLowerCase().match(/[a-z&][a-z&-]{4,}/g) ?? []);
+export function descriptionDrift(desc, pageText) {
+  if (GENERIC.some((g) => g.test(desc.trim()))) return "is a generic placeholder";
+  const page = new Set(words(pageText));
+  const own = [...new Set(words(desc))];
+  const missing = own.filter((w) => !page.has(w));
+  return own.length && missing.length / own.length > 0.3 ? `uses words the page doesn't (${missing.join(", ")})` : null;
+}
+function checkDescriptionFixtures() {
+  const page = "Nieuwe Groove Collectief is an Amsterdam sublabel of Epsilon Records, launched in 2024, for organic electronic, future soul, nu-disco and funky house.";
+  if (descriptionDrift("an Amsterdam sublabel of Epsilon Records, launched in 2024, for organic electronic, future soul, nu-disco and funky house", page)) throw new Error("description fixture: current description should pass");
+  if (!descriptionDrift("a Berlin label for drum and bass, hardstyle and gabber", page)) throw new Error("description fixture: wrong description should fail");
+  if (!descriptionDrift("a label page of Epsilon Records", page)) throw new Error("description fixture: placeholder should fail");
+}
+
 // llms.txt is what AI assistants read about the label, so it must agree with the site:
 // every epsilonrecords.com link is a sitemap page, and "Elsewhere" lists exactly the profiles
 // in the home page's Organization sameAs.
@@ -125,6 +145,17 @@ async function checkLlms(locs) {
       problems.push(`llms.txt: ${dest} should be https://epsilonrecords.com${url.pathname}`);
     }
     if (!locs.includes(url.pathname)) problems.push(`llms.txt: ${url.pathname} is not a sitemap page`);
+  }
+  // Each "- [Name](page): description" entry must agree with the page it links.
+  for (const [, href, desc] of llms.matchAll(/^- \[[^\]]+\]\((https:\/\/epsilonrecords\.com\/[^)\s]*)\):\s*(.+)$/gm)) {
+    const path = new URL(href).pathname;
+    const file = join(pub, path, "index.html");
+    if (!(await exists(file))) continue;
+    const html = await readFile(file, "utf8");
+    const text = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, " ").replace(/<[^>]+>|&[a-z]+;/g, (m) => (m.startsWith("<") ? " " : m === "&amp;" ? "&" : " "));
+    const meta = /<meta name="description" content="([^"]*)"/.exec(html)?.[1] ?? "";
+    const drift = descriptionDrift(desc, `${meta} ${text}`);
+    if (drift) problems.push(`llms.txt: the ${path} description ${drift}`);
   }
   const home = await readFile(join(pub, "index.html"), "utf8");
   // sameAs of the home page's Organization node, read from its JSON-LD, not the first match.
@@ -151,6 +182,7 @@ async function checkLlms(locs) {
 async function main() {
   await checkAnalytics();
   checkCspFixtures();
+  checkDescriptionFixtures();
   const files = await walk(pub);
   const html = files.filter((f) => f.endsWith(".html"));
   const problems = [];
