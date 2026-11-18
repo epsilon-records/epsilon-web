@@ -109,13 +109,26 @@ async function checkRedirects(pages) {
 async function checkLlms(locs) {
   const problems = [];
   const llms = await readFile(join(pub, "llms.txt"), "utf8");
-  for (const [, path] of llms.matchAll(/\]\(https:\/\/epsilonrecords\.com(\/[^)]*)\)/g)) {
-    if (!locs.includes(path)) problems.push(`llms.txt: ${path} is not a sitemap page`);
+  // Every destination, whatever its scheme, so an http:// link can't slip past.
+  const destinations = (text) => [...text.matchAll(/\]\(([^)\s]+)\)/g)].map((m) => m[1]);
+  for (const dest of destinations(llms)) {
+    let url;
+    try {
+      url = new URL(dest);
+    } catch {
+      problems.push(`llms.txt: ${dest} is not an absolute URL`);
+      continue;
+    }
+    if (!/^(www\.)?epsilonrecords\.com$/.test(url.hostname)) continue;
+    if (url.protocol !== "https:" || url.hostname !== "epsilonrecords.com") {
+      problems.push(`llms.txt: ${dest} should be https://epsilonrecords.com${url.pathname}`);
+    }
+    if (!locs.includes(url.pathname)) problems.push(`llms.txt: ${url.pathname} is not a sitemap page`);
   }
   const home = await readFile(join(pub, "index.html"), "utf8");
   const sameAs = JSON.parse(/"sameAs":(\[[^\]]*\])/.exec(home)?.[1] ?? "[]");
   const elsewhere = /## Elsewhere\n([\s\S]*?)(\n## |$)/.exec(llms)?.[1] ?? "";
-  const listed = [...elsewhere.matchAll(/\]\((https:[^)]+)\)/g)].map((m) => m[1]);
+  const listed = destinations(elsewhere);
   for (const url of sameAs) {
     if (!listed.includes(url)) problems.push(`llms.txt: Elsewhere is missing ${url} (in sameAs)`);
   }
