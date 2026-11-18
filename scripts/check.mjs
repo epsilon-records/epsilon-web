@@ -110,6 +110,7 @@ async function checkRedirects(pages) {
 const GENERIC = [/^an? (label\/collective|label) page of epsilon records$/i, /^partners of the label$/i];
 const words = (t) => (t.replace(/\(?https?:\/\/\S+/g, " ").toLowerCase().match(/[a-z&][a-z&-]{4,}/g) ?? []);
 export function descriptionDrift(desc, pageText) {
+  if (!desc.trim()) return "is empty";
   if (GENERIC.some((g) => g.test(desc.trim()))) return "is a generic placeholder";
   const page = new Set(words(pageText));
   const own = [...new Set(words(desc))];
@@ -118,10 +119,14 @@ export function descriptionDrift(desc, pageText) {
 }
 // "- [Name](page): description" entries, with any Markdown bullet (-, * or +), possibly indented.
 const llmsEntries = (text) =>
-  [...text.matchAll(/^\s*[-*+]\s+\[[^\]]+\]\((https:\/\/epsilonrecords\.com\/[^)\s]*)\):\s*(.+)$/gm)].map((m) => [m[1], m[2]]);
+  [...text.matchAll(/^\s*[-*+]\s+\[[^\]]+\]\(\s*<?(https:\/\/epsilonrecords\.com\/[^)\s>]*)>?\s*\):[ \t]*(.*)$/gm)].map((m) => [m[1], m[2].trim()]);
 function checkDescriptionFixtures() {
   const star = llmsEntries("* [LabelKit](https://epsilonrecords.com/labelkit/): a label page of Epsilon Records");
   if (star.length !== 1 || !descriptionDrift(star[0][1], "LabelKit")) throw new Error("description fixture: an asterisk-bullet placeholder should be checked and fail");
+  const angled = llmsEntries("- [LabelKit](<https://epsilonrecords.com/labelkit/>): a label page of Epsilon Records");
+  if (angled.length !== 1 || angled[0][0] !== "https://epsilonrecords.com/labelkit/" || !descriptionDrift(angled[0][1], "LabelKit")) throw new Error("description fixture: an angle-bracketed link should be checked and fail");
+  const empty = llmsEntries("- [LabelKit](https://epsilonrecords.com/labelkit/):");
+  if (empty.length !== 1 || descriptionDrift(empty[0][1], "LabelKit") !== "is empty") throw new Error("description fixture: an empty description should fail");
   const page = "Nieuwe Groove Collectief is an Amsterdam sublabel of Epsilon Records, launched in 2024, for organic electronic, future soul, nu-disco and funky house.";
   if (descriptionDrift("an Amsterdam sublabel of Epsilon Records, launched in 2024, for organic electronic, future soul, nu-disco and funky house", page)) throw new Error("description fixture: current description should pass");
   if (!descriptionDrift("a Berlin label for drum and bass, hardstyle and gabber", page)) throw new Error("description fixture: wrong description should fail");
