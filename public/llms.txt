@@ -21,7 +21,7 @@ Epsilon Records is not Delsin Records, Darin Epsilon, or other similarly named l
 
 - [LabelKit](https://epsilonrecords.com/labelkit/): label software for independent labels (releases, recordings, splits, agreements, consents, masters)
 - [AudioKit](https://epsilonrecords.com/audiokit/): an audio analysis and processing API (loudness, tempo, key, fingerprints, genre and mood, transcodes)
-- [Epsilon Audio](https://epsilonrecords.com/epsilon-audio/): software instruments and plugins for music makers
+- [Epsilon Audio](https://epsilonrecords.com/epsilon-audio/): software instruments and plugins for music makers, at https://plugins.epsilonrecords.com, and open hardware designs for Eurorack, at https://eurorack.epsilonrecords.com
 
 ## Elsewhere
 
