@@ -16,6 +16,7 @@
 //   and every page fits that CSP: no inline scripts, styles or event handlers, and every
 //   URL a page loads or submits to is allowed (scripts/check-csp.mjs, fixtures in
 //   scripts/check-csp.test.mjs)
+// - every llms.txt page entry agrees with its page (descriptionDrift, fixtures in checkDescriptionFixtures)
 // - every redirect in netlify.toml is well formed, unique, and points at a real
 //   file when its destination is internal
 
@@ -103,9 +104,97 @@ async function checkRedirects(pages) {
   return problems;
 }
 
+// A page entry in llms.txt drifts from its page when the summary uses words the page doesn't:
+// at least 70% of its content words (5+ letters) must appear in the page's text. The generic
+// placeholders the descriptions replaced always fail.
+const GENERIC = [/^an? (label\/collective|label) page of epsilon records$/i, /^partners of the label$/i];
+const words = (t) => (t.replace(/\(?https?:\/\/\S+/g, " ").toLowerCase().match(/[a-z&][a-z&-]{4,}/g) ?? []);
+export function descriptionDrift(desc, pageText) {
+  if (!desc.trim()) return "is empty";
+  if (GENERIC.some((g) => g.test(desc.trim()))) return "is a generic placeholder";
+  const page = new Set(words(pageText));
+  const own = [...new Set(words(desc))];
+  const missing = own.filter((w) => !page.has(w));
+  return own.length && missing.length / own.length > 0.3 ? `uses words the page doesn't (${missing.join(", ")})` : null;
+}
+// "- [Name](page): description" entries, with any Markdown bullet (-, * or +), possibly indented.
+const llmsEntries = (text) =>
+  [...text.matchAll(/^\s*[-*+]\s+\[[^\]]+\]\(\s*<?(https:\/\/epsilonrecords\.com\/[^)\s>]*)>?(?:\s+"[^"]*")?\s*\):[ \t]*(.*)$/gm)].map((m) => [m[1], m[2].trim()]);
+function checkDescriptionFixtures() {
+  const star = llmsEntries("* [LabelKit](https://epsilonrecords.com/labelkit/): a label page of Epsilon Records");
+  if (star.length !== 1 || !descriptionDrift(star[0][1], "LabelKit")) throw new Error("description fixture: an asterisk-bullet placeholder should be checked and fail");
+  const angled = llmsEntries("- [LabelKit](<https://epsilonrecords.com/labelkit/>): a label page of Epsilon Records");
+  if (angled.length !== 1 || angled[0][0] !== "https://epsilonrecords.com/labelkit/" || !descriptionDrift(angled[0][1], "LabelKit")) throw new Error("description fixture: an angle-bracketed link should be checked and fail");
+  const titled = llmsEntries('- [LabelKit](https://epsilonrecords.com/labelkit/ "LabelKit"): a label page of Epsilon Records');
+  if (titled.length !== 1 || !descriptionDrift(titled[0][1], "LabelKit")) throw new Error("description fixture: a titled link should be checked and fail");
+  const empty = llmsEntries("- [LabelKit](https://epsilonrecords.com/labelkit/):");
+  if (empty.length !== 1 || descriptionDrift(empty[0][1], "LabelKit") !== "is empty") throw new Error("description fixture: an empty description should fail");
+  const page = "Nieuwe Groove Collectief is an Amsterdam sublabel of Epsilon Records, launched in 2024, for organic electronic, future soul, nu-disco and funky house.";
+  if (descriptionDrift("an Amsterdam sublabel of Epsilon Records, launched in 2024, for organic electronic, future soul, nu-disco and funky house", page)) throw new Error("description fixture: current description should pass");
+  if (!descriptionDrift("a Berlin label for drum and bass, hardstyle and gabber", page)) throw new Error("description fixture: wrong description should fail");
+  if (!descriptionDrift("a label page of Epsilon Records", page)) throw new Error("description fixture: placeholder should fail");
+}
+
+// llms.txt is what AI assistants read about the label, so it must agree with the site:
+// every epsilonrecords.com link is a sitemap page, and "Elsewhere" lists exactly the profiles
+// in the home page's Organization sameAs.
+async function checkLlms(locs) {
+  const problems = [];
+  // CRLF-safe, so an editor's line endings can't hide the Elsewhere section.
+  const llms = (await readFile(join(pub, "llms.txt"), "utf8")).replace(/\r\n?/g, "\n");
+  // Every inline-link destination, whatever its scheme and with or without a "title".
+  const destinations = (text) => [...text.matchAll(/\]\(\s*<?([^)\s>]+)>?(?:\s+"[^"]*")?\s*\)/g)].map((m) => m[1]);
+  for (const dest of destinations(llms)) {
+    let url;
+    try {
+      url = new URL(dest);
+    } catch {
+      problems.push(`llms.txt: ${dest} is not an absolute URL`);
+      continue;
+    }
+    if (!/^(www\.)?epsilonrecords\.com$/.test(url.hostname)) continue;
+    if (url.origin !== "https://epsilonrecords.com") {
+      problems.push(`llms.txt: ${dest} should be https://epsilonrecords.com${url.pathname}`);
+    }
+    if (!locs.includes(url.pathname)) problems.push(`llms.txt: ${url.pathname} is not a sitemap page`);
+  }
+  // Each "- [Name](page): description" entry must agree with the page it links.
+  for (const [href, desc] of llmsEntries(llms)) {
+    const path = new URL(href).pathname;
+    const file = join(pub, path, "index.html");
+    if (!(await exists(file))) continue;
+    const html = await readFile(file, "utf8");
+    const text = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, " ").replace(/<[^>]+>|&[a-z]+;/g, (m) => (m.startsWith("<") ? " " : m === "&amp;" ? "&" : " "));
+    const meta = /<meta name="description" content="([^"]*)"/.exec(html)?.[1] ?? "";
+    const drift = descriptionDrift(desc, `${meta} ${text}`);
+    if (drift) problems.push(`llms.txt: the ${path} description ${drift}`);
+  }
+  const home = await readFile(join(pub, "index.html"), "utf8");
+  // sameAs of the home page's Organization node, read from its JSON-LD, not the first match.
+  const nodes = [...home.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+    .flatMap((m) => {
+      const data = JSON.parse(m[1]);
+      return data["@graph"] ?? (Array.isArray(data) ? data : [data]);
+    });
+  const org = nodes.find((n) => n["@type"] === "Organization" && n.url?.replace(/\/$/, "") === "https://epsilonrecords.com")
+    ?? nodes.find((n) => n["@type"] === "Organization");
+  const sameAs = org?.sameAs ?? [];
+  const elsewhere = /## Elsewhere\n([\s\S]*?)(\n## |$)/.exec(llms)?.[1] ?? "";
+  const listed = destinations(elsewhere);
+  for (const url of sameAs) {
+    if (!listed.includes(url)) problems.push(`llms.txt: Elsewhere is missing ${url} (in sameAs)`);
+  }
+  for (const url of listed) {
+    if (!sameAs.includes(url)) problems.push(`llms.txt: Elsewhere lists ${url}, which sameAs does not`);
+  }
+  if (sameAs.length === 0) problems.push("index.html: no Organization sameAs found");
+  return problems;
+}
+
 async function main() {
   await checkAnalytics();
   checkCspFixtures();
+  checkDescriptionFixtures();
   const files = await walk(pub);
   const html = files.filter((f) => f.endsWith(".html"));
   const problems = [];
@@ -167,6 +256,7 @@ async function main() {
     if (!locs.includes(url)) problems.push(`sitemap.xml: missing ${url}`);
   }
 
+  problems.push(...(await checkLlms(locs)));
   problems.push(...(await checkRedirects(pages)));
 
   if (release) {

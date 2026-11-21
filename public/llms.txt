@@ -10,16 +10,16 @@ Epsilon Records is not Delsin Records, Darin Epsilon, or other similarly named l
 
 - [About](https://epsilonrecords.com/about/): the label's story, founders, values and the software studio
 - [Collective](https://epsilonrecords.com/collective/): the community-based collective behind the label
-- [Nieuwe Groove Collectief](https://epsilonrecords.com/nieuwe-groove-collectief/): a label/collective page of Epsilon Records
-- [Diverse Records](https://epsilonrecords.com/diverse-records/): a label page of Epsilon Records
-- [Partners](https://epsilonrecords.com/partners/): partners of the label
-- [Send a demo](https://epsilonrecords.com/demos/): how artists submit demos
+- [Nieuwe Groove Collectief](https://epsilonrecords.com/nieuwe-groove-collectief/): an Amsterdam sublabel of Epsilon Records, launched in 2024, for organic electronic, future soul, nu-disco and funky house
+- [Diverse Records](https://epsilonrecords.com/diverse-records/): an Epsilon Records label for experimental, pop and fusion music, championing underrepresented genres and equal gender representation
+- [Partners](https://epsilonrecords.com/partners/): the label's industry partners: streaming services, download stores, and music-rights and recognition services
+- [Send a demo](https://epsilonrecords.com/demos/): how to send a demo: what to include, and where to send it
 - [A&R guide](https://epsilonrecords.com/anr-guide/): how the label works with signed artists
-- [Contact](https://epsilonrecords.com/contact/): email and social profiles
+- [Contact](https://epsilonrecords.com/contact/): email, and the label on socials
 
 ## Software
 
-- [LabelKit](https://epsilonrecords.com/labelkit/): label software for independent labels (releases, recordings, splits, agreements, consents, masters)
+- [LabelKit](https://epsilonrecords.com/labelkit/): API-first record-label management software for independent labels (releases, recordings, credits, splits, agreements, consents, masters); its public API is read-only for now (https://api.labelkit.co)
 - [AudioKit](https://epsilonrecords.com/audiokit/): an audio analysis and processing API (loudness, tempo, key, fingerprints, genre and mood, transcodes)
 - [Epsilon Audio](https://epsilonrecords.com/epsilon-audio/): software instruments and plugins for music makers, at https://plugins.epsilonrecords.com, and open hardware designs for Eurorack, at https://eurorack.epsilonrecords.com
 
@@ -30,6 +30,10 @@ Epsilon Records is not Delsin Records, Darin Epsilon, or other similarly named l
 - [Instagram](https://www.instagram.com/epsilonrecords/)
 - [YouTube](https://youtube.com/epsilonrecords)
 - [Mixcloud](https://mixcloud.com/epsilonrecords)
+- [Twitch](https://twitch.tv/epsilonrecords)
+- [TikTok](https://www.tiktok.com/@epsilonrecords)
+- [Facebook](https://facebook.com/epsilonrecords.nl)
+- [Discord](https://discord.gg/srS5ztY): the community server
 
 ## Optional
 
