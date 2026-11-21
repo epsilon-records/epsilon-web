@@ -5,7 +5,9 @@
 [build]
   command = "npm ci && npm run build"
   publish = "dist"
-  ignore = "[ -n \"$CACHED_COMMIT_REF\" ] && [ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."
+  # Deploy previews are off (Oracle, knowledge#134: Netlify credits until 14 Dec): a
+  # deploy-preview build is skipped unless its branch name ends in -preview.
+  ignore = "{ [ \"$CONTEXT\" = \"deploy-preview\" ] && [ \"${HEAD%-preview}\" = \"$HEAD\" ]; } || { [ -n \"$CACHED_COMMIT_REF\" ] && [ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- .; }"
 
 [build.environment]
   NODE_VERSION = "22"
