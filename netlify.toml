@@ -1,4 +1,4 @@
-# epsilon-web is a static site: there is no build step. Netlify publishes public/ as-is.
+# epsilon-web is a static site: nothing is compiled. Netlify publishes public/ as-is, after the release gate below.
 # Redirects, headers and the publish directory live here.
 #
 # The redirect map is decided in epsilon-web decisions 0003 and 0005
@@ -8,6 +8,9 @@
 
 [build]
   publish = "public"
+  # Netlify deploys main through its GitHub link (epsilon-web 0013). There is no build: the command is
+  # the release gate, which fails while a data-required fact is unfilled, so that page never publishes.
+  command = "node scripts/check.mjs --release"
   # storybook-hub/ is a different Netlify site (shared 0066). Commits that only touch it skip this
   # site's deploy (15 Free-plan credits each); an uncached build (equal refs) always deploys.
   ignore = "[ -n \"$CACHED_COMMIT_REF\" ] && [ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)storybook-hub'"
