@@ -40,7 +40,7 @@ scripts/check.mjs             dependency-free link/metadata/sitemap/redirect/pri
 scripts/check-analytics.mjs   analytics loader and HTML coverage checks, run by check.mjs
 scripts/analytics-contract.mjs  the reviewed list of tracked paths, shared by the checks
 scripts/analytics.browser.mjs manual Playwright harness for the loader (not in CI)
-.github/workflows/ci.yml      check on PRs and main; deploy to production from main
+.github/workflows/ci.yml      check on PRs and main (Netlify deploys, not Actions)
 ```
 
 ## Develop
@@ -73,9 +73,7 @@ The "B+C" direction ([epsilon-web 0002](https://github.com/epsilon-records/knowl
 
 ## Deploy
 
-GitHub Actions deploys, not Netlify: Netlify Free can't continuous-deploy a private org repo, so the `deploy` job in `ci.yml` publishes `public/` with the Netlify CLI (`netlify deploy --prod`). It runs only on pushes to `main`, after `check` passes and after `node scripts/check.mjs --release` passes. Pull requests run `check` only. They get **no deploy previews**. There is no build command.
-
-CLI deploys have a null `commit_ref` in Netlify. To match a deploy to a commit, use the deploy title (`github <sha>`).
+Netlify deploys `main` through its GitHub link ([epsilon-web 0013](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0013-deploy-through-netlify-github-link.md)). There is no build command, as on the plugins and Eurorack sites: Netlify publishes `public/`. CI runs `node scripts/check.mjs --release` on pull requests, so a page with an unfilled data-required fact can't merge. Commits that only touch `storybook-hub/` skip the deploy, and pull requests get a deploy preview only when the branch name ends in `-preview` (the `ignore` rule in `netlify.toml`). GitHub Actions runs `check` on pull requests and on `main`; it no longer deploys.
 
 The domain cutover is **live** (2026-11-08). `epsilonrecords.com` serves this site over HTTPS, `www` 301s to the apex, and the `.nl` hosts 301 to `.com`. Squarespace has been cancelled ([0008](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0008-proceed-with-squarespace-cancellation.md)). The Netlify badge is turned off for this site ([0004](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0004-disable-netlify-badge.md)).
 
@@ -98,7 +96,7 @@ Since the cutover, the host rules are live.
 
 **Placeholders:** content not yet migrated is marked with `data-placeholder` and shown in a dashed amber box, never as real copy. `node scripts/check.mjs` prints a warning for each page that still has one. Don't invent copy to fill them; take it from the old site.
 
-**Required facts:** a fact only Nate can supply (the privacy notice's controller name, address and privacy contact) is additionally marked `data-required="<fact>"`. `node scripts/check.mjs` warns about it; `node scripts/check.mjs --release`, which the deploy job runs before publishing, fails until it is filled. If the privacy notice's facts change (a new vendor, script or font source), update `/privacy/` in the same change.
+**Required facts:** a fact only Nate can supply (the privacy notice's controller name, address and privacy contact) is additionally marked `data-required="<fact>"`. `node scripts/check.mjs` warns about it; `node scripts/check.mjs --release`, which CI runs on every pull request, fails until it is filled, so the change can't merge. If the privacy notice's facts change (a new vendor, script or font source), update `/privacy/` in the same change.
 
 ## Analytics
 
