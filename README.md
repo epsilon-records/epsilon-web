@@ -73,7 +73,7 @@ The "B+C" direction ([epsilon-web 0002](https://github.com/epsilon-records/knowl
 
 ## Deploy
 
-Netlify deploys `main` through its GitHub link ([epsilon-web 0013](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0013-deploy-through-netlify-github-link.md)). Its build command is the release gate, `node scripts/check.mjs --release`, so a deploy fails while any data-required fact is unfilled. There is nothing to compile: Netlify publishes `public/`. Commits that only touch `storybook-hub/` skip the deploy (the `ignore` rule in `netlify.toml`). GitHub Actions runs `check` on pull requests and on `main`; it no longer deploys.
+Netlify deploys `main` through its GitHub link ([epsilon-web 0013](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0013-deploy-through-netlify-github-link.md)). There is no build command, as on the plugins and Eurorack sites: Netlify publishes `public/`. CI runs `node scripts/check.mjs --release` on pull requests, so a page with an unfilled data-required fact can't merge. Commits that only touch `storybook-hub/` skip the deploy (the `ignore` rule in `netlify.toml`). GitHub Actions runs `check` on pull requests and on `main`; it no longer deploys.
 
 The domain cutover is **live** (2026-11-08). `epsilonrecords.com` serves this site over HTTPS, `www` 301s to the apex, and the `.nl` hosts 301 to `.com`. Squarespace has been cancelled ([0008](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0008-proceed-with-squarespace-cancellation.md)). The Netlify badge is turned off for this site ([0004](https://github.com/epsilon-records/knowledge/blob/main/epsilon-web/decisions/0004-disable-netlify-badge.md)).
 
@@ -96,7 +96,7 @@ Since the cutover, the host rules are live.
 
 **Placeholders:** content not yet migrated is marked with `data-placeholder` and shown in a dashed amber box, never as real copy. `node scripts/check.mjs` prints a warning for each page that still has one. Don't invent copy to fill them; take it from the old site.
 
-**Required facts:** a fact only Nate can supply (the privacy notice's controller name, address and privacy contact) is additionally marked `data-required="<fact>"`. `node scripts/check.mjs` warns about it; `node scripts/check.mjs --release`, Netlify's build command, fails until it is filled, so the deploy fails. If the privacy notice's facts change (a new vendor, script or font source), update `/privacy/` in the same change.
+**Required facts:** a fact only Nate can supply (the privacy notice's controller name, address and privacy contact) is additionally marked `data-required="<fact>"`. `node scripts/check.mjs` warns about it; `node scripts/check.mjs --release`, which CI runs on every pull request, fails until it is filled, so the change can't merge. If the privacy notice's facts change (a new vendor, script or font source), update `/privacy/` in the same change.
 
 ## Analytics
 

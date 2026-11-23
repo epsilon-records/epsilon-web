@@ -19,3 +19,6 @@ jobs:
           node-version: "22"
       # Dependency-free: checks links, page metadata and sitemap coverage. No npm install.
       - run: node scripts/check.mjs
+      # Release check: fails while any data-required fact (the privacy notice's controller and contact)
+      # is unfilled, so a page that needs one can't merge to main, which Netlify deploys.
+      - run: node scripts/check.mjs --release
