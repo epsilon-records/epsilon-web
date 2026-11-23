@@ -11,9 +11,11 @@
   # Netlify deploys main through its GitHub link (epsilon-web 0013). No build, like the plugins and
   # Eurorack sites: CI runs the release check on pull requests, before anything reaches main.
   command = ""
-  # storybook-hub/ is a different Netlify site (shared 0066). Commits that only touch it skip this
-  # site's deploy (15 Free-plan credits each); an uncached build (equal refs) always deploys.
-  ignore = "[ -n \"$CACHED_COMMIT_REF\" ] && [ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)storybook-hub'"
+  # Deploys cost 15 Free-plan credits each. Like the other sites, pull requests get a deploy preview
+  # only when the branch name ends in -preview. storybook-hub/ is a different Netlify site
+  # (shared 0066): commits that only touch it skip this site's deploy; an uncached build (equal refs)
+  # always deploys.
+  ignore = "{ [ \"$CONTEXT\" = \"deploy-preview\" ] && [ \"${HEAD%-preview}\" = \"$HEAD\" ]; } || { [ -n \"$CACHED_COMMIT_REF\" ] && [ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)storybook-hub'; }"
 
 # The Content-Security-Policy allows what the pages load (EPSILON-118): self-hosted fonts, the
 # Cloudflare Web Analytics beacon (shared 0011) and the Kit signup form's POST (shared 0027),
